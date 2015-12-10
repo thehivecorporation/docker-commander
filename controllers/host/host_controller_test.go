@@ -15,7 +15,5 @@ func TestIsHostAliveFunc(t *testing.T){
 
   if (!a){
     t.Fatal("Not alive")
-  } else {
-    assert(a, true, "Host is alive")
-  }
+  } 
 }
