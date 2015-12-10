@@ -1,1 +1,2 @@
-bin/docker-commander
+bin
+npm-debug.log

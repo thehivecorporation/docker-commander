@@ -1,19 +1,15 @@
 package main
 
 import (
-    "github.com/gin-gonic/gin"
-    "github.com/sayden/docker-commander/routes/app"
-    "github.com/sayden/docker-commander/routes/api"
+	"github.com/gin-gonic/gin"
+	"github.com/sayden/docker-commander/config"
+	"github.com/sayden/docker-commander/routes"
 )
 
-func main(){
-  ginApp := gin.Default()
+func main() {
+	ginApp := gin.Default()
 
-  //Init Front routes
-  app.Init(ginApp)
+	routes.Init(ginApp)
 
-  //Init api routes
-  api.Init(ginApp)
-
-  ginApp.Run(":8000")
+	ginApp.Run(config.APP_PORT)
 }
