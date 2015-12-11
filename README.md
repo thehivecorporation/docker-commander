@@ -14,33 +14,52 @@ A GUI to manage Docker
 ## MoSCoW Requirements
 
 ### Host Requirements
-* As the User, I *Must* know if a *Host* is down or not so I'll know as fast as possible that one or more containers could be down
+* As the User, I *Must* __know__ __if__ a __*Host* is down__ or not so I'll know as fast as possible that one or more containers could be down
   * *Acceptance criteria:*
     * A registered host is turned off. It appears like *down* in the dashboard
     * A registered host is on. It appears like *online* in the dashboard
-* As the User, I *Must* know how many containers a *Host* is hosting so I have some insight of the host load
+    * A registered *Host* that appears like *online* is turned off. The app shows *down* after the *refreshing period* has passed
+    * A registered *Host* that appears like *down* is turned on. The app shows *online* after the *refreshing period* has passed.
+
+
+* As the User, I *Must* __know the Images__ a *Host* is hosting so I have some insight of the host load
   * Acceptance criteria:
-    * TODO
-* As the User, I *Should* know the latency I'm getting against a *Host* so I can detect potential connectivity problems
+    * A *Host* without *Images* appears like empty.
+    * A *Host* with 2 *Images* appears correctly.
+    * In a *Host* with 2 *Images* we add one more. 3 *Images* must appear after *refreshing period* has passed
+    * In a *Host* with 3 *Imags* we delte one. 2 *Images* must appear after *refreshing period* has passed.
+
+
+* As the User, I *Should* __know the latency__ I'm getting against a *Host* so I can detect potential connectivity problems
   * Acceptance criteria:
-    * TODO
-* As the User, I *Must* know the names of the *Containers* that a *Host* has so I know all *Containers* currently installed
+    * In each *refreshing period* cycle, a *latency* for each *Host* must appear in ms must appear in the dashboard.
+   * A *Host* is turned off. *Latency* must show *timeout*.
+
+
+* As the User, I *Must* __know the running *Containers*__ in a *Host* so I have full knowledge of the *Host's* *Containers*
   * Acceptance criteria:
-    * TODO
-* As the User, I *Must* know the names of the running *Containers* so I have full knowledge of the *Host* *Containers*
+    * No *Containers* are running. A *Container* is run. It appears after *refreshing period* has passed
+    * A *Container* is running. The *Container* is killed. It dissapears from the dashboard after the *refreshing period* has passed.
+
+
+* As the User, I *Should* know all exposed ports in a *Host*
   * Acceptance criteria:
-    * TODO
-* As the User, i *Should* know all exposed ports in a *Host*
-  * Acceptance criteria:
-    * TODO
+    * A *Host* has no exposed ports. No ports appears on the *Container* description.
+    * A *Host* has a *Container* running with one exposed port. The mapping appears in the dashboard.
+    * A *Host* has a *Container* with 2 exposed ports. Both mapping appears in *Container* description.
 
 ### Containers Requirements
 * As the User, I *Must* know the full status and details of a container
   * Acceptance criteria:
-    * TODO
-* As the User, I *Must* know if a selected *Container* is actually running
+    * A *More info* query is done against a *Container*. The result must show as much info as possible TODO.
+
+
+* As the User, I *Must* know if a selected *Image* is actually running
   * Acceptance criteria:
-    * TODO
+    * An *Image* installed in Docker is "selected". The *Image* has an associated *Container* running. The dashboard must show the associated *Container*.
+    * An *Image* installed in Docker is "selected". The *Image* does not have an associated *Container* running. The dashboard must show no associated *Containers*.
+
+
 * As the User, I *Should* know the exposed ports of a *Container*
   * Acceptance criteria:
     * TODO
