@@ -3,18 +3,20 @@ docker-commander
 A GUI to manage Docker
 
 ## Some info
-* Project structure is defined like here: https://github.com/golang/go/wiki/GithubCodeLayout
-* We're using gin-gonic: https://github.com/gin-gonic/gin
+* Project structure is defined like [here](https://github.com/golang/go/wiki/GithubCodeLayout):
+* We're using [gin-gonic](https://github.com/gin-gonic/gin)
+* We'll use [Docker Swarm](https://github.com/docker/swarm) probably and / or Ansible.
 
 ## Glossary
-* A ***Host*** is a machine, virtual or not, accessible from the server that is going to host Docker containers.
-* The ***Server*** is the machine hosting Docker Commander
-* A ***Container*** is a Docker container that is being host in a *Host*.
+* A `Host` is a machine, virtual or not, accessible from the server that is going to host Docker containers.
+* The `Server` is the machine hosting Docker Commander
+* A `Container` is a Docker container that is being host in a *Host*.
+* A `Commander` is a User of the application. Has `Hosts` associated.
 
 ## MoSCoW Requirements
 
 ### Host Requirements
-* As the User, I *Must* __know__ __if__ a __*Host* is down__ or not so I'll know as fast as possible that one or more containers could be down
+* As the *Commander*, I *Must* __know__ __if__ a __*Host* is down__ or not so I'll know as fast as possible that one or more containers could be down
   * *Acceptance criteria:*
     * A registered host is turned off. It appears like *down* in the dashboard
     * A registered host is on. It appears like *online* in the dashboard
@@ -22,7 +24,7 @@ A GUI to manage Docker
     * A registered *Host* that appears like *down* is turned on. The app shows *online* after the *refreshing period* has passed.
 
 
-* As the User, I *Must* __know the Images__ a *Host* is hosting so I have some insight of the host load
+* As the *Commander*, I *Must* __know the Images__ a *Host* is hosting so I have some insight of the host load
   * Acceptance criteria:
     * A *Host* without *Images* appears like empty.
     * A *Host* with 2 *Images* appears correctly.
@@ -30,36 +32,41 @@ A GUI to manage Docker
     * In a *Host* with 3 *Imags* we delte one. 2 *Images* must appear after *refreshing period* has passed.
 
 
-* As the User, I *Should* __know the latency__ I'm getting against a *Host* so I can detect potential connectivity problems
+* As the *Commander*, I *Should* __know the latency__ I'm getting against a *Host* so I can detect potential connectivity problems
   * Acceptance criteria:
     * In each *refreshing period* cycle, a *latency* for each *Host* must appear in ms must appear in the dashboard.
    * A *Host* is turned off. *Latency* must show *timeout*.
 
 
-* As the User, I *Must* __know the running *Containers*__ in a *Host* so I have full knowledge of the *Host's* *Containers*
+* As the *Commander*, I *Must* __know the running *Containers*__ in a *Host* so I have full knowledge of the *Host's* *Containers*
   * Acceptance criteria:
     * No *Containers* are running. A *Container* is run. It appears after *refreshing period* has passed
     * A *Container* is running. The *Container* is killed. It dissapears from the dashboard after the *refreshing period* has passed.
 
 
-* As the User, I *Should* know all exposed ports in a *Host*
+* As the *Commander*, I *Should* know all exposed ports in a *Host*
   * Acceptance criteria:
     * A *Host* has no exposed ports. No ports appears on the *Container* description.
     * A *Host* has a *Container* running with one exposed port. The mapping appears in the dashboard.
     * A *Host* has a *Container* with 2 exposed ports. Both mapping appears in *Container* description.
 
 ### Containers Requirements
-* As the User, I *Must* know the full status and details of a container
+* As the *Commander*, I *Must* know the full status and details of a container
   * Acceptance criteria:
     * A *More info* query is done against a *Container*. The result must show as much info as possible TODO.
 
 
-* As the User, I *Must* know if a selected *Image* is actually running
+* As the *Commander*, I *Must* know if a selected *Image* is actually running
   * Acceptance criteria:
     * An *Image* installed in Docker is "selected". The *Image* has an associated *Container* running. The dashboard must show the associated *Container*.
     * An *Image* installed in Docker is "selected". The *Image* does not have an associated *Container* running. The dashboard must show no associated *Containers*.
 
 
-* As the User, I *Should* know the exposed ports of a *Container*
+* As the *Commander*, I *Should* know the exposed ports of a *Container* and their associated mapping ports in *Host* so I know that available ports in *Host*
   * Acceptance criteria:
-    * TODO
+    * A *Container* that is running has no exposed *ports*. The result in dashboard shows no ports.
+    * A *Container* that is running has one exposed *port*. The result in dashboard shows one mapped port and their associated ports in *Host*.
+    * A *Container* that is running has 3 exposed *ports*. The result in dashboard shows 3 mapped ports and their associated ports in *Host*.
+
+### Commander Requirements
+TODO
