@@ -5,10 +5,21 @@
   become_method: sudo
   vars:
     etcd_server: 192.168.1.35
-
   tasks:
-    - name: Add ETCD
-      yum: name=docker state=present
+    - name: Ensure ETCD is installed
+      yum: name=etcd state=present
+
+    - name: Ensure ETCD configuration is correct 1
+      lineinfile: dest=/etc/etcd/etcd.conf
+                  state=present
+                  regexp=ETCD_ADVERTISE_CLIENT_URLS
+                  line='ETCD_ADVERTISE_CLIENT_URLS=http://{{ etcd_server}}:2379'
+
+    - name: Ensure ETCD configuration is correct 2
+      lineinfile: dest=/etc/etcd/etcd.conf
+                  state=present
+                  regexp=ETCD_LISTEN_CLIENT_URLS
+                  line='ETCD_LISTEN_CLIENT_URLS=http://{{ etcd_server}}:2379'
 
     - name: Start ETCD
-      shell: "nohup etcd -listen-client-urls 'http://{{ etcd_server }}:2379' -advertise-client-urls 'http://{{ etcd_server }}:2379' &"
+      service: name=etcd state=started
