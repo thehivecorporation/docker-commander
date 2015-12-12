@@ -1,0 +1,18 @@
+# Deploys a Swarm agent with ETCD based discovery
+- hosts: agents
+  become: yes
+  become_method: sudo
+  vars:
+    etcd_server: 192.168.1.35:2181
+  tasks:
+    - name: Add Docker
+      yum: name=docker state=present
+
+    - name: Add python-docker-py
+      yum: name=python-docker-py state=present
+
+    - name: Start Docker Daemon
+      shell: "nohup docker daemon -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock &"
+
+    - name: Run Docker Swarm Agent Image
+      shell: docker run -d swarm join --addr={{ inventory_hostname }}:2375 etcd://{{ etcd_server }}
