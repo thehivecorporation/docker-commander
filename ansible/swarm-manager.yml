@@ -1,0 +1,25 @@
+# Deploys a Swarm Manager with ETCD based discovery
+- hosts: managers
+  become: yes
+  become_method: sudo
+  vars:
+    etcd_server: 192.168.1.35:2379
+    manager_port: 8081
+  tasks:
+    - name: Add Docker
+      yum: name=docker state=present
+
+    - name: Add python-docker-py
+      yum: name=python-docker-py state=present
+
+    - name: Ensure Docker config is correct for Daemon
+      lineinfile: dest=/etc/sysconfig/docker state=present line=OPTIONS="-H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock"
+
+    - name: Start Docker Daemon
+      service: name=docker state=restarted enabled=yes
+
+    - name: Run Docker Swarm Manager Image
+      docker: name=swarm
+              image=swarm
+              ports={{ manager_port }}:2375
+              command='manage etcd://{{ etcd_server }}'
