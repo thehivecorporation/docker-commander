@@ -3,7 +3,7 @@
   become: yes
   become_method: sudo
   vars:
-    etcd_server: 192.168.1.35:2181
+    etcd_server: 192.168.1.35:2379
   tasks:
     - name: Add Docker
       yum: name=docker state=present
