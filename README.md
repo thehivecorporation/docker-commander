@@ -44,29 +44,63 @@ A GUI to manage Docker
     * A *Container* is running. The *Container* is killed. It dissapears from the dashboard after the *refreshing period* has passed.
 
 
-* As the *Commander*, I *Should* know all exposed ports in a *Host*
+* As the *Commander*, I *Should* __know__ all __exposed ports__ in a *Host*
   * Acceptance criteria:
     * A *Host* has no exposed ports. No ports appears on the *Container* description.
     * A *Host* has a *Container* running with one exposed port. The mapping appears in the dashboard.
     * A *Host* has a *Container* with 2 exposed ports. Both mapping appears in *Container* description.
 
 ### Containers Requirements
-* As the *Commander*, I *Must* know the full status and details of a container
+* As the *Commander*, I *Must* __know__ the full __status__ and details __of__ a __container__
   * Acceptance criteria:
     * A *More info* query is done against a *Container*. The result must show as much info as possible TODO.
 
 
-* As the *Commander*, I *Must* know if a selected *Image* is actually running
+* As the *Commander*, I *Must* __know if__ a selected __*Image* is__ actually __running__
   * Acceptance criteria:
     * An *Image* installed in Docker is "selected". The *Image* has an associated *Container* running. The dashboard must show the associated *Container*.
     * An *Image* installed in Docker is "selected". The *Image* does not have an associated *Container* running. The dashboard must show no associated *Containers*.
 
 
-* As the *Commander*, I *Should* know the exposed ports of a *Container* and their associated mapping ports in *Host* so I know that available ports in *Host*
+* As the *Commander*, I *Should* __know__ the __exposed ports of__ a __*Container*__ and their associated mapping ports in *Host* so I know that available ports in *Host*
   * Acceptance criteria:
     * A *Container* that is running has no exposed *ports*. The result in dashboard shows no ports.
     * A *Container* that is running has one exposed *port*. The result in dashboard shows one mapped port and their associated ports in *Host*.
     * A *Container* that is running has 3 exposed *ports*. The result in dashboard shows 3 mapped ports and their associated ports in *Host*.
 
 ### Commander Requirements
+TODO
+
+
+# Architecture
+
+## Gin Gonic Server
+
+### etcd piece
+
+Maintains state of the app and connected Swarm agents in cluster
+
+* Watch 2 events:
+  * New Agent in cluster: Emits `new-agent` event in server
+  * Agent down in cluster: Emits `kill-agent` event in server
+
+### REST Client
+
+Will be used by server to make REST connections to Swarm Agents and Manager and return JSON info "as is" back to front via web-socket.
+
+### Socket API
+
+An API via socket layer to communicate real-time with front. Because it's bi-directional it is described as follows:
+
+
+#### Client->Server
+  * `cluster`: Returns a json with the entire cluster state. Mainly used when a client has just connected to the app
+  * `agent:containers`: Replicates `GET /containers/json`. Needs image IP and optional parameters like in [Docker API](https://docs.docker.com/engine/reference/api/docker_remote_api_v1.22/#list-volumes)
+  * `agent:images`: Replicates `GET /images/json`
+
+#### Server->Client
+  * `new-agent`: When a new Swarm Agent has joined the cluster
+  * `kill-agent`: When an already existing Swarm Agent has left the cluster
+
+## Front (React+Redux)
 TODO
