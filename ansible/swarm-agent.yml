@@ -11,8 +11,13 @@
     - name: Add python-docker-py
       yum: name=python-docker-py state=present
 
+    - name: Ensure Docker config is correct for Daemon
+      lineinfile: dest=/etc/sysconfig/docker state=present line=OPTIONS="-H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock"
+
     - name: Start Docker Daemon
-      shell: "nohup docker daemon -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock &"
+      service: name=docker state=restarted enabled=yes
 
     - name: Run Docker Swarm Agent Image
-      shell: docker run -d swarm join --addr={{ inventory_hostname }}:2375 etcd://{{ etcd_server }}
+      docker: name=swarm
+              image=swarm
+              command='join --addr={{ inventory_hostname }}:2375 etcd://{{ etcd_server }}'
