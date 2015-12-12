@@ -1,0 +1,11 @@
+[managers]
+192.168.1.35
+
+[agents]
+192.168.1.39      ansible_sudo_pass=osboxes.org    ansible_ssh_user=osboxes    this_ip=192.168.1.39:2375
+
+[server]
+192.168.1.35
+
+[etcd]
+192.168.1.35

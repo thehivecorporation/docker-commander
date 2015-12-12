@@ -1,0 +1,25 @@
+# Deploys an ETCD server in cluster
+# NOTE: It can be installed as a server but it seems to not work properly with Docker
+- hosts: etcd
+  become: yes
+  become_method: sudo
+  vars:
+    etcd_server: 192.168.1.35
+  tasks:
+    - name: Ensure ETCD is installed
+      yum: name=etcd state=present
+
+    - name: Ensure ETCD configuration is correct 1
+      lineinfile: dest=/etc/etcd/etcd.conf
+                  state=present
+                  regexp=ETCD_ADVERTISE_CLIENT_URLS
+                  line='ETCD_ADVERTISE_CLIENT_URLS=http://{{ etcd_server}}:2379'
+
+    - name: Ensure ETCD configuration is correct 2
+      lineinfile: dest=/etc/etcd/etcd.conf
+                  state=present
+                  regexp=ETCD_LISTEN_CLIENT_URLS
+                  line='ETCD_LISTEN_CLIENT_URLS=http://{{ etcd_server}}:2379'
+
+    - name: Start ETCD
+      service: name=etcd state=started
