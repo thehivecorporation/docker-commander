@@ -1,0 +1,28 @@
+{
+  "name": "docker-commander",
+  "version": "0.0.1",
+  "description": "A GUI to manage Docker hosts and containers",
+  "main": "main.go",
+  "scripts": {
+    "start":"go run main.go",
+    "test-integration":"go test ./tests/...",
+    "test": "go test `go list ./... | grep -v tests`",
+    "build":"go build -o bin/docker-commander"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sayden/docker-commander.git"
+  },
+  "keywords": [
+    "go",
+    "docker",
+    "container",
+    "manager"
+  ],
+  "author": "Mario Castro <mariocaster@gmail.com> (http://mariocaster.blogspot.com)",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/sayden/docker-commander/issues"
+  },
+  "homepage": "https://github.com/sayden/docker-commander#readme"
+}
