@@ -9,4 +9,4 @@ before_install:
   - go get github.com/gin-gonic/gin
 
 script:
-  go test `go list ./... | grep -v tests`
+  "go test -cover `go list ./... | grep -v tests`"
