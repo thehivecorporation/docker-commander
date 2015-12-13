@@ -22,6 +22,6 @@ func TestEtcdClientIntegration(t *testing.T) {
 }
 
 func TestWatch(t *testing.T) {
-	e := discovery.EtcdClient{Host: "http://192.168.1.35:2379"}
-	e.WatchHosts()
+	// e := discovery.EtcdClient{Host: "http://192.168.1.35:2379"}
+	// e.WatchHosts()
 }
