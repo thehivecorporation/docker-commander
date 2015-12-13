@@ -73,11 +73,11 @@ func TestGetImages(t *testing.T) {
 	} else {
 		c := dat[0]
 		if c["Id"] == nil {
-			t.Fail()
+			t.Fatal("'Id' not found")
 		}
 
-		if (c["Repo"]) == nil {
-			t.Fail()
+		if (c["RepoTags"]) == nil {
+			t.Fatal("'RepoTags' not found")
 		}
 	}
 }
