@@ -1,6 +1,8 @@
 docker-commander
 =====
-A GUI to manage Docker
+[![Build Status](https://travis-ci.org/sayden/docker-commander.svg?branch=master)](https://travis-ci.org/sayden/docker-commander)
+
+A GUI to manage Docker Swarm.
 
 ## Some info
 * Project structure is defined like [here](https://github.com/golang/go/wiki/GithubCodeLayout):
