@@ -5,9 +5,10 @@
   "main": "main.go",
   "scripts": {
     "start":"go run main.go",
-    "test-integration":"go test ./tests/integration/...",
-    "test": "go test `go list ./... | grep -v tests`",
-    "build":"go build -o bin/docker-commander"
+    "test-integration":"go test ./tests/integration/... | sed ''/ok/s//$(printf \"\\033[32mok\\033[0m\")/'' | sed ''/FAIL/s//$(printf \"\\033[31mFAIL\\033[0m\")/''",
+    "test": "go test `go list ./... | grep -v tests` | sed ''/ok/s//$(printf \"\\033[32mok\\033[0m\")/'' | sed ''/FAIL/s//$(printf \"\\033[31mFAIL\\033[0m\")/''",
+    "build":"go build -o bin/docker-commander",
+    "test-all":"npm test && npm run test-integration"
   },
   "repository": {
     "type": "git",
