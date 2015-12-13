@@ -16,10 +16,10 @@
       lineinfile: dest=/etc/sysconfig/docker state=present line=OPTIONS="-H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock"
 
     - name: Start Docker Daemon
-      service: name=docker state=restarted enabled=yes
+      service: name=docker state=started enabled=yes
 
     - name: Run Docker Swarm Manager Image
-      docker: name=swarm
+      docker: name=swarm-agent
               image=swarm
               ports={{ manager_port }}:2375
               command='manage etcd://{{ etcd_server }}'
