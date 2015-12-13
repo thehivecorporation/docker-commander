@@ -1,8 +1,5 @@
 package discovery
 
-// Client abstract
-type Client struct{}
-
 // Node for representing connected clients to discovery service
 type Node struct {
 	IP string
@@ -10,16 +7,22 @@ type Node struct {
 
 // InfoService interface definition to access discovery services
 type InfoService interface {
-	ListHosts(serviceURL string) ([]Node, error)
+	ListHosts() ([]Node, error)
+	WatchHosts()
 }
 
 // ListHosts returns the hosts joined in cluster
-func (c *Client) ListHosts(serviceURL string, i InfoService) ([]Node, error) {
-	r, err := i.ListHosts(serviceURL)
+func ListHosts(i InfoService) ([]Node, error) {
+	r, err := i.ListHosts()
 
 	if err != nil {
 		return nil, err
 	}
 
 	return r, nil
+}
+
+// WatchHosts is to attach a closure to any change event in the hosts list
+func WatchHosts(i InfoService) {
+	i.WatchHosts()
 }

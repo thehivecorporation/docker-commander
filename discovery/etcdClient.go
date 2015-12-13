@@ -1,6 +1,7 @@
 package discovery
 
 import (
+	"fmt"
 	"log"
 	"time"
 
@@ -9,23 +10,50 @@ import (
 )
 
 // EtcdClient struct to use with ETCD clusters
-type EtcdClient struct{}
+// TODO Make it work with an ETCD cluster instead of only one node
+type EtcdClient struct {
+	Host string
+}
+
+// WatchHosts TODO use some goroutines here
+func (e *EtcdClient) WatchHosts() {
+	kapi, err := e.getClient()
+
+	if err != nil {
+		panic("")
+	}
+
+	o := client.WatcherOptions{Recursive: true}
+	w := kapi.Watcher("/test", &o)
+
+	r, err := w.Next(context.Background())
+
+	//TODO DELETE
+	opGet := client.GetOptions{Recursive: true}
+	respNodes, err := kapi.Get(context.Background(), "/test", &opGet)
+	ns := respNodes.Node.Nodes
+
+	// TODO Make a break action to stop recursivity
+	if err == nil {
+		if len(ns) == 0 {
+			fmt.Println("Exiting app")
+		} else {
+			log.Printf("%q action triggered on %q to set it to %q\n", r.Action, r.Node.Key, r.Node.Value)
+			log.Println(len(ns))
+			e.WatchHosts()
+		}
+	} else {
+		log.Fatal(err)
+	}
+}
 
 // ListHosts returns connected swarm nodes
-func (e *EtcdClient) ListHosts(serviceURLs string) ([]Node, error) {
-	//etcd implementation here
-	cfg := client.Config{
-		Endpoints: []string{serviceURLs},
-		Transport: client.DefaultTransport,
-		// set timeout per request to fail fast when the target endpoint is unavailable
-		HeaderTimeoutPerRequest: time.Second,
-	}
-	c, err := client.New(cfg)
+func (e *EtcdClient) ListHosts() ([]Node, error) {
+	kapi, err := e.getClient()
 	if err != nil {
 		log.Fatal(err)
 		return nil, err
 	}
-	kapi := client.NewKeysAPI(c)
 
 	// get "/docker/swarm/nodes" list
 	o := client.GetOptions{Recursive: true}
@@ -45,4 +73,21 @@ func (e *EtcdClient) ListHosts(serviceURLs string) ([]Node, error) {
 	}
 
 	return nodesArray, nil
+}
+
+func (e *EtcdClient) getClient() (client.KeysAPI, error) {
+	cfg := client.Config{
+		Endpoints: []string{e.Host},
+		Transport: client.DefaultTransport,
+		// set timeout per request to fail fast when the target endpoint is unavailable
+		HeaderTimeoutPerRequest: time.Second,
+	}
+	c, err := client.New(cfg)
+	if err != nil {
+		log.Fatal(err)
+		return nil, err
+	}
+
+	kapi := client.NewKeysAPI(c)
+	return kapi, nil
 }
