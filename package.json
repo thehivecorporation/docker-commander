@@ -5,7 +5,7 @@
   "main": "main.go",
   "scripts": {
     "start":"go run main.go",
-    "test-integration":"go test ./tests/...",
+    "test-integration":"go test ./tests/integration/...",
     "test": "go test `go list ./... | grep -v tests`",
     "build":"go build -o bin/docker-commander"
   },

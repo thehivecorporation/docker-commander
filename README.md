@@ -7,6 +7,28 @@ A GUI to manage Docker
 * We're using [gin-gonic](https://github.com/gin-gonic/gin)
 * We'll use [Docker Swarm](https://github.com/docker/swarm) probably and / or Ansible.
 
+## Running Tests
+
+### Mock tests
+```bash
+# With npm
+npm test
+
+# Without npm
+go test `go list ./... | grep -v tests`
+```
+
+### Integration tests
+Requires some config like an ETCD local installation, Swarm Manager and Swarm Agents. Can be easily achieved via ansible playbooks included.
+
+```bash
+# With npm
+npm run test-integration
+
+# Without npm
+go test ./tests/integration/...
+```
+
 ## Glossary
 * A `Host` is a machine, virtual or not, accessible from the server that is going to host Docker containers.
 * The `Server` is the machine hosting Docker Commander
