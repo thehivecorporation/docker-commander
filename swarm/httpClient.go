@@ -4,10 +4,9 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"strings"
-
-	"github.com/docker/machine/libmachine/log"
 )
 
 // HTTPClient implementation to access swarm info
@@ -49,7 +48,7 @@ func makeHTTPGetRequest(c *HTTPClient, trailURL string) ([]byte, error) {
 	}
 
 	url := c.Host + trailURL
-	log.Info("Requesting to", url)
+	log.Println("Requesting to", url)
 	r, err := http.Get(c.Host + trailURL)
 	defer r.Body.Close()
 
