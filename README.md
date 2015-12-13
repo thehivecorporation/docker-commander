@@ -29,6 +29,10 @@ npm run test-integration
 go test ./tests/integration/...
 ```
 
+## Architecture
+![alt text](docker-commander.png "Architecture")
+
+
 ## Glossary
 * A `Host` is a machine, virtual or not, accessible from the server that is going to host Docker containers.
 * The `Server` is the machine hosting Docker Commander
