@@ -2,10 +2,13 @@ package discovery
 
 import "testing"
 
-import "github.com/sayden/docker-commander/discovery"
+import (
+	"github.com/sayden/docker-commander/config"
+	"github.com/sayden/docker-commander/discovery"
+)
 
 func TestEtcdClientIntegration(t *testing.T) {
-	e := discovery.EtcdClient{Host: "http://192.168.1.35:2379"}
+	e := discovery.EtcdClient{Host: config.ETCD}
 	r, err := e.ListHosts()
 
 	if err != nil {
