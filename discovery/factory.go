@@ -8,16 +8,18 @@ import (
 
 // GetClient returns a configured client to talk with discovery service
 func GetClient() InfoService {
-	switch config.CURRENT_ENV {
-	case config.DEVELOPMENT:
-		s := EtcdClient{Host: config.ETCD}
+	switch config.DISCOVERY_SERVICE {
+	case config.ETCD:
+		s := EtcdClient{Host: config.ETCD_HOST}
 		return &s
-	case config.PRODUCTION:
-		//TODO Production mode in swarm factory
-		log.Fatal("Production mode not configured yet for swarm factory")
+	case config.CONSUL:
+		log.Fatal("Consul not yet implemented")
+		return nil
+	case config.ZOOKEEPER:
+		log.Fatal("Zookeeper not yet implemented")
 		return nil
 	default:
-		s := EtcdClient{Host: config.ETCD}
+		s := EtcdClient{Host: config.ETCD_HOST}
 		return &s
 	}
 }
