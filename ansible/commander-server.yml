@@ -1,0 +1,2 @@
+# Deploys the Docker-Commander Server exposing 8000 ports for front and 8001
+# for socket connections
