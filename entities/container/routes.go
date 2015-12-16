@@ -1,6 +1,6 @@
 package container
 
-import "github.com/gin-gonic/gin"
+import "github.com/sayden/docker-commander/Godeps/_workspace/src/github.com/gin-gonic/gin"
 
 // InitializesRoutes to access API endpoints
 func InitializesRoutes(app *gin.Engine) {

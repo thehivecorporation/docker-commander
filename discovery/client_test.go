@@ -8,7 +8,7 @@ type mockDiscovery struct {
 
 // ListHosts mocked
 func (c *mockDiscovery) ListHosts() ([]Node, error) {
-	ns := []Node{Node{"ip1"}, Node{"ip2"}}
+	ns := []Node{Node{IP: "ip1"}, Node{IP: "ip2"}}
 
 	return ns, nil
 }

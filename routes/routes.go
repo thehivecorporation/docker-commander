@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/gin-gonic/gin"
-	"github.com/gorilla/websocket"
+	"github.com/sayden/docker-commander/Godeps/_workspace/src/github.com/gin-gonic/gin"
+	"github.com/sayden/docker-commander/Godeps/_workspace/src/github.com/gorilla/websocket"
 	"github.com/sayden/docker-commander/entities/container"
 	"github.com/sayden/docker-commander/entities/host"
 )
