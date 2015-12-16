@@ -7,7 +7,7 @@ func TestParseContainer(t *testing.T) {
 	byt := []byte(str)
 
 	dp := DockerClientParser{}
-	containers, err := dp.parseContainer(&byt)
+	containers, err := dp.ParseContainer(&byt)
 
 	if err != nil {
 		t.Fatal("Container parse incorrect")
@@ -19,7 +19,7 @@ func TestParseContainer(t *testing.T) {
 
 	//Pass an string that its going to produce an error
 	anErr := []byte("{\"asfasdf\":1")
-	containers, err = dp.parseContainer(&anErr)
+	containers, err = dp.ParseContainer(&anErr)
 
 	if err == nil {
 		t.Fatal("Container parse must be incorrect")
@@ -35,7 +35,7 @@ func TestParseImages(t *testing.T) {
 	byt := []byte(str)
 
 	dp := DockerClientParser{}
-	images, err := dp.parseImages(&byt)
+	images, err := dp.ParseImages(&byt)
 
 	if err != nil {
 		t.Fatal("Image Parse incorrect")
@@ -47,7 +47,7 @@ func TestParseImages(t *testing.T) {
 
 	//Pass an string that its going to produce an error
 	anErr := []byte("{\"asfasdf\":1")
-	images, err = dp.parseImages(&anErr)
+	images, err = dp.ParseImages(&anErr)
 
 	if err == nil {
 		t.Fatal("Container parse must be incorrect")
@@ -63,7 +63,7 @@ func TestParseInfo(t *testing.T) {
 	byt := []byte(str)
 
 	dp := DockerClientParser{}
-	info, err := dp.parseInfo(&byt)
+	info, err := dp.ParseInfo(&byt)
 
 	if err != nil {
 		t.Fatal("Info Parse incorrect")
@@ -75,7 +75,7 @@ func TestParseInfo(t *testing.T) {
 
 	//Pass an string that its going to produce an error
 	anErr := []byte("{\"asfasdf\":1")
-	info, err = dp.parseInfo(&anErr)
+	info, err = dp.ParseInfo(&anErr)
 
 	if err == nil {
 		t.Fatal("Info parse must be incorrect")

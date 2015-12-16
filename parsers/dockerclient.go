@@ -6,25 +6,33 @@ import (
 	"github.com/samalba/dockerclient"
 )
 
+// DockerClientParser uses dockerclient project to parse objects back
+type DockerClientParser struct{}
+
 //ContainerParser is used to parse an array of bytes to Container types
 type ContainerParser interface {
-	parseContainer(cs *[]byte) ([]dockerclient.Container, error)
+	ParseContainer(cs *[]byte) ([]dockerclient.Container, error)
 }
 
 //ImageParser is used to parse an array of bytes to Images types
 type ImageParser interface {
-	parseImages(is *[]byte) ([]dockerclient.Image, error)
+	ParseImages(is *[]byte) ([]dockerclient.Image, error)
 }
 
 //InfoParser is used to parse an array of bytes to Cluster types
 type InfoParser interface {
-	parseInfo(i *[]byte) (dockerclient.Info, error)
+	ParseInfo(i *[]byte) (dockerclient.Info, error)
 }
 
-// DockerClientParser uses dockerclient project to parse objects back
-type DockerClientParser struct{}
+// DockerClientNode is a holder for a full structure
+type DockerClientNode struct {
+	IP         string
+	Containers []dockerclient.Container
+	Images     []dockerclient.Image
+}
 
-func (d *DockerClientParser) parseContainer(cs *[]byte) ([]dockerclient.Container, error) {
+// ParseContainer parses a []byte to dockerclient.Container objects
+func (d *DockerClientParser) ParseContainer(cs *[]byte) ([]dockerclient.Container, error) {
 	jsonCs := []dockerclient.Container{}
 	err := json.Unmarshal(*cs, &jsonCs)
 	if err != nil {
@@ -34,7 +42,8 @@ func (d *DockerClientParser) parseContainer(cs *[]byte) ([]dockerclient.Containe
 	return jsonCs, nil
 }
 
-func (d *DockerClientParser) parseImages(is *[]byte) ([]dockerclient.Image, error) {
+// ParseImages parses a []byte to dockerclient.Image objects
+func (d *DockerClientParser) ParseImages(is *[]byte) ([]dockerclient.Image, error) {
 	jsonCs := []dockerclient.Image{}
 	err := json.Unmarshal(*is, &jsonCs)
 
@@ -45,7 +54,8 @@ func (d *DockerClientParser) parseImages(is *[]byte) ([]dockerclient.Image, erro
 	return jsonCs, nil
 }
 
-func (d *DockerClientParser) parseInfo(i *[]byte) (dockerclient.Info, error) {
+// ParseInfo parses a []byte to dockerclient.Info objects
+func (d *DockerClientParser) ParseInfo(i *[]byte) (dockerclient.Info, error) {
 	jsonCs := dockerclient.Info{}
 	err := json.Unmarshal(*i, &jsonCs)
 
