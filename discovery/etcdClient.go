@@ -5,8 +5,8 @@ import (
 	"log"
 	"time"
 
-	"github.com/coreos/etcd/client"
-	"golang.org/x/net/context"
+	"github.com/sayden/docker-commander/Godeps/_workspace/src/github.com/coreos/etcd/client"
+	"github.com/sayden/docker-commander/Godeps/_workspace/src/golang.org/x/net/context"
 )
 
 // EtcdClient struct to use with ETCD clusters
@@ -69,7 +69,7 @@ func (e *EtcdClient) ListHosts() ([]Node, error) {
 
 	nodesArray := make([]Node, len(resp.Node.Nodes))
 	for i, n := range resp.Node.Nodes {
-		nodesArray[i] = Node{n.Value}
+		nodesArray[i] = Node{IP: n.Value}
 	}
 
 	return nodesArray, nil

@@ -1,24 +1,36 @@
 package discovery
 
-import "testing"
+import (
+	"errors"
+	"testing"
+)
 
-type mockDiscovery struct {
+type mockDiscoveryOk struct {
+	Host string
+}
+
+type mockDiscoveryError struct {
 	Host string
 }
 
 // ListHosts mocked
-func (c *mockDiscovery) ListHosts() ([]Node, error) {
-	ns := []Node{Node{"ip1"}, Node{"ip2"}}
+func (c *mockDiscoveryOk) ListHosts() ([]Node, error) {
+	ns := []Node{Node{IP: "ip1"}, Node{IP: "ip2"}}
 
 	return ns, nil
 }
+func (c *mockDiscoveryOk) WatchHosts() {}
 
-func (c *mockDiscovery) WatchHosts() {
+//ListHosts Error
+func (c *mockDiscoveryError) ListHosts() ([]Node, error) {
+	e := errors.New("An error")
 
+	return nil, e
 }
+func (c *mockDiscoveryError) WatchHosts() {}
 
-func TestClientMock(t *testing.T) {
-	i := mockDiscovery{Host: "mockIp"}
+func TestClientMockOk(t *testing.T) {
+	i := mockDiscoveryOk{Host: "mockIp"}
 	r, err := ListHosts(&i)
 
 	if err != nil {
@@ -27,5 +39,14 @@ func TestClientMock(t *testing.T) {
 
 	for _, n := range r {
 		t.Log(n.IP)
+	}
+}
+
+func TestClientMockError(t *testing.T) {
+	i := mockDiscoveryError{Host: "mockIp"}
+	_, err := ListHosts(&i)
+
+	if err == nil {
+		t.Fail()
 	}
 }

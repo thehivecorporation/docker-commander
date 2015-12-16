@@ -4,11 +4,12 @@ import (
 	"encoding/json"
 	"testing"
 
+	"github.com/sayden/docker-commander/config"
 	"github.com/sayden/docker-commander/swarm"
 )
 
 func TestGetHosts(t *testing.T) {
-	h := swarm.HTTPClient{Host: "http://192.168.1.35:8081"}
+	h := swarm.HTTPClient{Host: config.SWARM_MANAGER}
 	r, err := swarm.GetHosts(&h)
 
 	if err != nil {
