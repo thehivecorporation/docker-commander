@@ -7,8 +7,6 @@ import (
 
 	"github.com/sayden/docker-commander/Godeps/_workspace/src/github.com/gin-gonic/gin"
 	"github.com/sayden/docker-commander/Godeps/_workspace/src/github.com/gorilla/websocket"
-	"github.com/sayden/docker-commander/entities/container"
-	"github.com/sayden/docker-commander/entities/host"
 )
 
 // Init routes for the entire application
@@ -18,10 +16,6 @@ func Init(ginApp *gin.Engine) {
 	ginApp.GET("/", index)
 
 	ginApp.GET("/ws", initWebSocket)
-
-	//Initializes modules route	s
-	host.InitializesRoutes(ginApp)
-	container.InitializesRoutes(ginApp)
 }
 
 func index(c *gin.Context) {
