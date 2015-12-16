@@ -5,8 +5,8 @@ import (
 	"log"
 	"time"
 
-	"github.com/coreos/etcd/client"
-	"golang.org/x/net/context"
+	"github.com/sayden/docker-commander/Godeps/_workspace/src/github.com/coreos/etcd/client"
+	"github.com/sayden/docker-commander/Godeps/_workspace/src/golang.org/x/net/context"
 )
 
 // EtcdClient struct to use with ETCD clusters
