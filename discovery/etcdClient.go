@@ -69,7 +69,7 @@ func (e *EtcdClient) ListHosts() ([]Node, error) {
 
 	nodesArray := make([]Node, len(resp.Node.Nodes))
 	for i, n := range resp.Node.Nodes {
-		nodesArray[i] = Node{n.Value}
+		nodesArray[i] = Node{IP: n.Value}
 	}
 
 	return nodesArray, nil

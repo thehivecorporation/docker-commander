@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
@@ -18,9 +17,7 @@ func Init(ginApp *gin.Engine) {
 	ginApp.LoadHTMLFiles("public/index.html")
 	ginApp.GET("/", index)
 
-	ginApp.GET("/ws", func(c *gin.Context) {
-		webSocketHandler(c.Writer, c.Request)
-	})
+	ginApp.GET("/ws", initWebSocket)
 
 	//Initializes modules route	s
 	host.InitializesRoutes(ginApp)
@@ -36,13 +33,17 @@ var wsupgrader = websocket.Upgrader{
 	WriteBufferSize: 1024,
 }
 
-func webSocketHandler(w http.ResponseWriter, r *http.Request) {
-	conn, err := wsupgrader.Upgrade(w, r, nil)
+func initWebSocket(c *gin.Context) {
+	conn, err := wsupgrader.Upgrade(c.Writer, c.Request, nil)
 	if err != nil {
 		fmt.Printf("Failed to set websocket upgrade: %+v", err)
 		return
 	}
 
+	go messageHandler(conn)
+}
+
+func messageHandler(conn *websocket.Conn) {
 	for {
 		t, msg, err := conn.ReadMessage()
 		if err != nil {
@@ -54,24 +55,22 @@ func webSocketHandler(w http.ResponseWriter, r *http.Request) {
 			log.Fatal(err)
 		}
 
-		conn.WriteMessage(t, msg)
-	}
-}
+		a := jsonMsg["action"]
 
-func socketMsgHandler(j map[string]interface{}) {
-	a := j["action"]
+		switch a {
+		case "cluster":
+			//TODO Ask cluster state
+			fmt.Println("Not yet implemented")
+		case "agent:containers":
+			//TODO Gets containers of some swarm agent
+			fmt.Println("Not yet implemented")
+		case "agent:images":
+			//TODO Gets images of some swarm agent
+			fmt.Println("Not yet implemented")
+		default:
+			fmt.Println("Handle message")
+			conn.WriteMessage(t, msg)
+		}
 
-	switch a {
-	case "cluster":
-		//TODO Ask cluster state
-		fmt.Println("Not yet implemented")
-	case "agent:containers":
-		//TODO Gets containers of some swarm agent
-		fmt.Println("Not yet implemented")
-	case "agent:images":
-		//TODO Gets images of some swarm agent
-		fmt.Println("Not yet implemented")
-	default:
-		fmt.Println("Handle message")
 	}
 }

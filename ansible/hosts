@@ -1,11 +1,12 @@
 [managers]
-192.168.1.35
+192.168.1.35      ansible_sudo_pass=123wersada    ansible_ssh_user=root
 
 [agents]
-192.168.1.39      ansible_sudo_pass=osboxes.org    ansible_ssh_user=osboxes    this_ip=192.168.1.39:2375
+192.168.1.35      ansible_sudo_pass=123wersada    ansible_ssh_user=root
+192.168.1.39      ansible_sudo_pass=osboxes.org    ansible_ssh_user=osboxes
 
 [server]
-192.168.1.35
+192.168.1.35      ansible_sudo_pass=123wersada    ansible_ssh_user=root
 
 [etcd]
-192.168.1.35
+192.168.1.35      ansible_sudo_pass=123wersada    ansible_ssh_user=root

@@ -1,13 +1,15 @@
 package socket
 
 import (
+	"encoding/json"
 	"log"
 
 	"github.com/sayden/docker-commander/discovery"
+	"github.com/sayden/docker-commander/entities"
 	"github.com/sayden/docker-commander/swarm"
 )
 
-func handlerCluster() {
+func getClusterInfo() {
 	s := swarm.GetClient()
 
 	// Cluster info
@@ -17,17 +19,24 @@ func handlerCluster() {
 		return
 	}
 
-	//Foreach host, get containers
+	var cData map[string]interface{}
+
+	if err := json.Unmarshal(r, &cData); err != nil {
+		log.Fatal(err)
+	}
+
+	c := cluster.Cluster{Info: &cData}
+
+	//Get every host
 	d := discovery.GetClient()
 	hs, err := d.ListHosts()
-  if err != nil{
-    log.Fatal(err)
-    return
-  }
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
 
-  var containers := []map[string]interface{}
+	//Foreach host, get its containers
+	for _, h := range hs {
 
-  for _, h := range hs {
-    
-  }
+	}
 }
