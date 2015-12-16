@@ -21,6 +21,11 @@
 			"Rev": "68a3962f6459c7a2f813ce9cbdb64447821381aa"
 		},
 		{
+			"ImportPath": "github.com/docker/docker/pkg/units",
+			"Comment": "v1.4.1-8449-g8d36f09",
+			"Rev": "8d36f097cfe8fd3a4e6bed6123fb1fea24889c7b"
+		},
+		{
 			"ImportPath": "github.com/gin-gonic/gin",
 			"Comment": "v1.0rc1-148-g52fcc5d",
 			"Rev": "52fcc5dbf6e94df33ad313858fb94b713e9d1b4a"
@@ -40,6 +45,10 @@
 		{
 			"ImportPath": "github.com/mattn/go-isatty",
 			"Rev": "56b76bdf51f7708750eac80fa38b952bb9f32639"
+		},
+		{
+			"ImportPath": "github.com/samalba/dockerclient",
+			"Rev": "4656b1bc6cbc06b75d65983475e4809cbd53ebb5"
 		},
 		{
 			"ImportPath": "github.com/ugorji/go/codec",

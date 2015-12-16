@@ -3,7 +3,7 @@ package parsers
 import (
 	"encoding/json"
 
-	"github.com/samalba/dockerclient"
+	"github.com/sayden/docker-commander/Godeps/_workspace/src/github.com/samalba/dockerclient"
 )
 
 // DockerClientParser uses dockerclient project to parse objects back
