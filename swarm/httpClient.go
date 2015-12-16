@@ -14,8 +14,8 @@ type HTTPClient struct {
 	Host string
 }
 
-// GetHosts Rest implementation
-func (c *HTTPClient) GetHosts() ([]byte, error) {
+// GetInfo Rest implementation
+func (c *HTTPClient) GetInfo() ([]byte, error) {
 	return makeHTTPGetRequest(c, "/info")
 }
 

@@ -11,7 +11,7 @@ type HTTPClientMock struct {
 }
 
 // Get is the mocked Get implementation of http.Get
-func (h *HTTPClientMock) GetHosts() ([]byte, error) {
+func (h *HTTPClientMock) GetInfo() ([]byte, error) {
 	str := `{"ID":"","Containers":102,"Driver":"","DriverStatus":[["\bRole","primary"],["\bStrategy","spread"],["\bFilters","health, port, dependency, affinity, constraint"],["\bNodes","1"],["osboxes","192.168.1.39:2375"],[" â”” Status","Healthy"],[" â”” Containers","102"],[" â”” Reserved CPUs","0 / 1"],[" â”” Reserved Memory","0 B / 1.888 GiB"],[" â”” Labels","executiondriver=native-0.2, kernelversion=3.10.0-123.el7.x86_64, operatingsystem=CentOS Linux 7 (Core), storagedriver=devicemapper"]],"ExecutionDriver":"","Images":5,"KernelVersion":"","OperatingSystem":"","NCPU":1,"MemTotal":2027035852,"Name":"6514d918bc01","Labels":null,"Debug":false,"NFd":0,"NGoroutines":0,"SystemTime":"2015-12-13T17:25:40.540782247Z","NEventsListener":0,"InitPath":"","InitSha1":"","IndexServerAddress":"","MemoryLimit":true,"SwapLimit":true,"IPv4Forwarding":true,"BridgeNfIptables":true,"BridgeNfIp6tables":true,"DockerRootDir":"","HttpProxy":"","HttpsProxy":"","NoProxy":""}`
 	byt := []byte(str)
 	return byt, nil
@@ -38,7 +38,7 @@ func TestIsErrorInURL(t *testing.T) {
 
 func TestGetHosts(t *testing.T) {
 	mock := HTTPClientMock{Host: "http://some_url"}
-	c, err := GetHosts(&mock)
+	c, err := GetInfo(&mock)
 
 	if err != nil {
 		t.Fatal(err)
