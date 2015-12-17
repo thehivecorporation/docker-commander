@@ -14,21 +14,21 @@ type HTTPClient struct {
 	Host string
 }
 
-// GetHosts Rest implementation
-func (c *HTTPClient) GetHosts() ([]byte, error) {
-	return makeHTTPGetRequest(c, "/info")
+// ListInfo Rest implementation
+func (c *HTTPClient) ListInfo() ([]byte, error) {
+	return c.makeHTTPGetRequest("/info")
 }
 
-// GetContainers returns the Containers of a specific host. . Replicates
+// ListContainers returns the Containers of a specific host. . Replicates
 // GET [docker-host]:2375/containers/json
-func (c *HTTPClient) GetContainers() ([]byte, error) {
-	return makeHTTPGetRequest(c, "/containers/json")
+func (c *HTTPClient) ListContainers() ([]byte, error) {
+	return c.makeHTTPGetRequest("/containers/json")
 }
 
-// GetImages returns the Images of a specific host. Replicates
+// ListImages returns the Images of a specific host. Replicates
 // GET [docker-host]:2375/images/json
-func (c *HTTPClient) GetImages() ([]byte, error) {
-	return makeHTTPGetRequest(c, "/images/json")
+func (c *HTTPClient) ListImages() ([]byte, error) {
+	return c.makeHTTPGetRequest("/images/json")
 }
 
 //TODO The URL must have HTTP en port included
@@ -42,7 +42,7 @@ func isErrorInURL(url string) error {
 	return nil
 }
 
-func makeHTTPGetRequest(c *HTTPClient, trailURL string) ([]byte, error) {
+func (c *HTTPClient) makeHTTPGetRequest(trailURL string) ([]byte, error) {
 	if err := isErrorInURL(c.Host); err != nil {
 		return nil, err
 	}

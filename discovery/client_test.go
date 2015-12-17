@@ -2,24 +2,9 @@ package discovery
 
 import "testing"
 
-type mockDiscovery struct {
-	Host string
-}
-
-// ListHosts mocked
-func (c *mockDiscovery) ListHosts() ([]Node, error) {
-	ns := []Node{Node{"ip1"}, Node{"ip2"}}
-
-	return ns, nil
-}
-
-func (c *mockDiscovery) WatchHosts() {
-
-}
-
-func TestClientMock(t *testing.T) {
-	i := mockDiscovery{Host: "mockIp"}
-	r, err := ListHosts(&i)
+func TestClientMockOk(t *testing.T) {
+	i := MockDiscoveryOk{Host: "mockIp"}
+	r, err := i.ListHosts()
 
 	if err != nil {
 		t.Fail()
@@ -27,5 +12,14 @@ func TestClientMock(t *testing.T) {
 
 	for _, n := range r {
 		t.Log(n.IP)
+	}
+}
+
+func TestClientMockError(t *testing.T) {
+	i := MockDiscoveryError{Host: "mockIp"}
+	_, err := i.ListHosts()
+
+	if err == nil {
+		t.Fail()
 	}
 }
