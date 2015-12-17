@@ -3,10 +3,5 @@ language: go
 go:
   - tip
 
-install:
-  - go get github.com/coreos/etcd
-  - go get golang.org/x/net/context
-  - go get github.com/gin-gonic/gin
-
 script:
   - "go test -cover `go list ./... | grep -v tests`"
