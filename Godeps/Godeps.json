@@ -6,11 +6,6 @@
 	],
 	"Deps": [
 		{
-			"ImportPath": "github.com/coreos/etcd/client",
-			"Comment": "v2.3.0-alpha.0-170-g68a3962",
-			"Rev": "68a3962f6459c7a2f813ce9cbdb64447821381aa"
-		},
-		{
 			"ImportPath": "github.com/coreos/etcd/pkg/pathutil",
 			"Comment": "v2.3.0-alpha.0-170-g68a3962",
 			"Rev": "68a3962f6459c7a2f813ce9cbdb64447821381aa"
@@ -49,6 +44,11 @@
 		{
 			"ImportPath": "github.com/samalba/dockerclient",
 			"Rev": "4656b1bc6cbc06b75d65983475e4809cbd53ebb5"
+		},
+		{
+			"ImportPath": "github.com/sayden/etcd/client",
+			"Comment": "v2.3.0-alpha.0-184-ga976aa3",
+			"Rev": "a976aa3039d36647ac533903a80eaccaa77a7067"
 		},
 		{
 			"ImportPath": "github.com/ugorji/go/codec",

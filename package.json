@@ -1,6 +1,6 @@
 {
   "name": "docker-commander",
-  "version": "0.0.1",
+  "version": "0.1.2",
   "description": "A GUI to manage Docker hosts and containers",
   "main": "main.go",
   "scripts": {

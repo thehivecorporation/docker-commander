@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/sayden/docker-commander/Godeps/_workspace/src/github.com/coreos/etcd/client"
+	"github.com/sayden/docker-commander/Godeps/_workspace/src/github.com/sayden/etcd/client"
 	"github.com/sayden/docker-commander/Godeps/_workspace/src/golang.org/x/net/context"
 )
 
