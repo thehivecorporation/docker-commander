@@ -48,19 +48,21 @@ func getAgentsList(i discovery.InfoService) ([]parsers.DockerClientNode, error) 
 	return agents, nil
 }
 
-func addContainersForEachAgent(s swarm.Swarm, ag *[]parsers.DockerClientNode) error {
+func addContainersForEachAgent(s swarm.Swarm, ag *[]parsers.DockerClientNode, p parsers.ContainerParser) error {
 	if len(*ag) == 0 {
 		log.Println("ERROR: There are no agents in ag parameter")
 	}
 
+	agents := *ag
+
 	//Foreach host, get its containers
-	for _, h := range *ag {
+	for i := range agents {
+		h := &agents[i]
 		csb, err := s.ListContainers()
 		if err != nil {
 			return err
 		}
 
-		p := parsers.DockerClientParser{}
 		cs, err := p.ParseContainer(&csb)
 		if err != nil {
 			return err
@@ -71,24 +73,25 @@ func addContainersForEachAgent(s swarm.Swarm, ag *[]parsers.DockerClientNode) er
 	return nil
 }
 
-func addImagesForEachAgent(s swarm.Swarm, ag *[]parsers.DockerClientNode) error {
+func addImagesForEachAgent(s swarm.Swarm, ag *[]parsers.DockerClientNode, p parsers.ImageParser) error {
 	if len(*ag) == 0 {
 		log.Println("ERROR: There are no agents in ag parameter")
 	}
 
-	//Foreach host, get its images
-	for _, h := range *ag {
+	agents := *ag
+
+	//Foreach host, get its containers
+	for i := range agents {
+		h := &agents[i]
 		isb, err := s.ListImages()
 		if err != nil {
 			return err
 		}
 
-		p := parsers.DockerClientParser{}
 		is, err := p.ParseImages(&isb)
 		if err != nil {
 			return err
 		}
-
 		h.Images = is
 	}
 

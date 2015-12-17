@@ -27,7 +27,7 @@ func TestGetClusterInfo(t *testing.T) {
 	}
 }
 
-func TestGetHostsList(t *testing.T) {
+func TestGetAgentsList(t *testing.T) {
 	dOk := discovery.MockDiscoveryOk{"http://a_host"}
 	hs, err := getAgentsList(&dOk)
 	if err != nil {
@@ -50,14 +50,26 @@ func TestGetHostsList(t *testing.T) {
 }
 
 func TestAddContainersForEachAgent(t *testing.T) {
+	//Prepare
 	var s swarm.Swarm = &swarm.HTTPClientMock{"http://a_host"}
 	dOk := discovery.MockDiscoveryOk{"http://a_host"}
-	agents, err := getAgentsList(&dOk)
-	if err != nil {
-		t.Fatal("Error trying to get hosts list")
+	rawAgents, err := dOk.ListHosts()
+	mockParser := parsers.DockerClientParserMock{}
+
+	agents := []parsers.DockerClientNode{}
+	for _, a := range rawAgents {
+		agent := parsers.DockerClientNode{
+			IP: a.IP,
+		}
+
+		agents = append(agents, agent)
 	}
 
-	err = addContainersForEachAgent(s, &agents)
+	//Test
+	err = addContainersForEachAgent(s, &agents, &mockParser)
+	if err != nil {
+		t.Fail()
+	}
 
 	if err != nil {
 		t.Fatal("Assert failed when trying to get Agent Containers")
@@ -68,39 +80,45 @@ func TestAddContainersForEachAgent(t *testing.T) {
 		t.Fatal("No hosts has been created")
 	}
 
-	if agents[0].IP != "ip1" {
+	if len(agents[0].Containers) == 0 {
 		log.Println(agents[0])
 		t.Fatal("No Container has been added to host 0")
-	}
-
-	s = &swarm.HTTPClientMockError{"http://a_host"}
-	agents = make([]parsers.DockerClientNode, 10)
-	err = addContainersForEachAgent(s, &agents)
-
-	if err == nil {
-		t.Fatal("An error was expected")
 	}
 }
 
 func TestAddImagesForEachAgent(t *testing.T) {
+	//Prepare
 	var s swarm.Swarm = &swarm.HTTPClientMock{"http://a_host"}
 	dOk := discovery.MockDiscoveryOk{"http://a_host"}
-	agents, err := getAgentsList(&dOk)
-	if err != nil {
-		t.Fatal("Error trying to get hosts list")
+	rawAgents, err := dOk.ListHosts()
+	mockParser := parsers.DockerClientParserMock{}
+
+	agents := []parsers.DockerClientNode{}
+	for _, a := range rawAgents {
+		agent := parsers.DockerClientNode{
+			IP: a.IP,
+		}
+
+		agents = append(agents, agent)
 	}
 
-	err = addImagesForEachAgent(s, &agents)
+	//Test
+	err = addImagesForEachAgent(s, &agents, &mockParser)
+	if err != nil {
+		t.Fail()
+	}
 
 	if err != nil {
 		t.Fatal("Assert failed when trying to get Agent Containers")
 	}
 
 	if len(agents) == 0 {
+		log.Println(agents)
 		t.Fatal("No hosts has been created")
 	}
 
-	if agents[0].IP != "ip1" {
-		t.Fatal("No image has been added to host 0")
+	if len(agents[0].Images) == 0 {
+		log.Println(agents[0])
+		t.Fatal("No Images has been added to host '0'")
 	}
 }

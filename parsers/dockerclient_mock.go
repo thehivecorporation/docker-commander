@@ -23,10 +23,10 @@ func (d *DockerClientParserMock) ParseContainer(cs *[]byte) ([]dockerclient.Cont
 // ParseImages parses a []byte to dockerclient.Image objects
 func (d *DockerClientParserMock) ParseImages(is *[]byte) ([]dockerclient.Image, error) {
 	str := `[{"Id":"e9ff33e7e5b9a683ab735bbe99450c50bd0b64c4e414d12c94ff93b345d3bb18","ParentId":"22218d75fdd7dfba85feb60f8165eecb5ba13b9364b07ec2b8cd76e887bd6d78","RepoTags":["docker.io/swarm:latest"],"RepoDigests":[],"Created":1449709381,"Size":0,"VirtualSize":17146714,"Labels":null},{"Id":"088f61431e99e47b795a8e0026753bb701b607a6bc356123ac3e058b71376753","ParentId":"8ece2cf6713e1370451fbefbeb5e8985cc27c11ab1b21f188c8a04ac6db92aa9","RepoTags":["sayden/centos-simplest-node:latest"],"RepoDigests":[],"Created":1449525441,"Size":0,"VirtualSize":544843301,"Labels":{"License":"GPLv2","Vendor":"CentOS"}}]`
-	byteContainers := []byte(str)
+	byteImages := []byte(str)
 
 	jsonCs := []dockerclient.Image{}
-	json.Unmarshal(byteContainers, &jsonCs)
+	json.Unmarshal(byteImages, &jsonCs)
 
 	return jsonCs, nil
 }
