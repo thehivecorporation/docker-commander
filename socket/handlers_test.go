@@ -1,16 +1,17 @@
 package socket
 
 import (
+	"fmt"
 	"log"
 	"testing"
 
 	"github.com/sayden/docker-commander/discovery"
-	"github.com/sayden/docker-commander/parsers"
+	"github.com/sayden/docker-commander/entities"
 	"github.com/sayden/docker-commander/swarm"
 )
 
 func TestGetClusterInfo(t *testing.T) {
-	var s swarm.Swarm = &swarm.HTTPClientMock{"http://a_host"}
+	s := swarm.GetClient(swarm.TYPE_MOCK_OK)
 	i, err := getClusterInfo(s)
 	if err != nil {
 		t.Fatal("Error trying to get cluster info")
@@ -20,7 +21,7 @@ func TestGetClusterInfo(t *testing.T) {
 		t.Fatal("Containers assertion failed")
 	}
 
-	s = &swarm.HTTPClientMockError{"http://a_host"}
+	s = swarm.GetClient(swarm.TYPE_MOCK_ERROR)
 	i, err = getClusterInfo(s)
 	if err == nil {
 		t.Fatal("There is no error after passing an incorrect json")
@@ -28,8 +29,8 @@ func TestGetClusterInfo(t *testing.T) {
 }
 
 func TestGetAgentsList(t *testing.T) {
-	dOk := discovery.MockDiscoveryOk{"http://a_host"}
-	hs, err := getAgentsList(&dOk)
+	i := discovery.GetClient(swarm.TYPE_MOCK_OK)
+	hs, err := getAgentsList(i)
 	if err != nil {
 		t.Fatal("Error trying to get hosts list")
 	}
@@ -38,8 +39,8 @@ func TestGetAgentsList(t *testing.T) {
 		t.Fatal("Host[0].IP is not the expected result")
 	}
 
-	dError := discovery.MockDiscoveryError{"http://a_host"}
-	hs, err = getAgentsList(&dError)
+	i = discovery.GetClient(swarm.TYPE_MOCK_ERROR)
+	hs, err = getAgentsList(i)
 	if err == nil {
 		t.Fatal("No error after passing a malformed json")
 	}
@@ -51,14 +52,13 @@ func TestGetAgentsList(t *testing.T) {
 
 func TestAddContainersForEachAgent(t *testing.T) {
 	//Prepare
-	var s swarm.Swarm = &swarm.HTTPClientMock{"http://a_host"}
-	dOk := discovery.MockDiscoveryOk{"http://a_host"}
-	rawAgents, err := dOk.ListHosts()
-	mockParser := parsers.DockerClientParserMock{}
+	s := swarm.GetClient(swarm.TYPE_MOCK_OK)
+	i := discovery.GetClient(swarm.TYPE_MOCK_OK)
+	rawAgents, err := i.ListHosts()
 
-	agents := []parsers.DockerClientNode{}
+	agents := []entities.Agent{}
 	for _, a := range rawAgents {
-		agent := parsers.DockerClientNode{
+		agent := entities.Agent{
 			IP: a.IP,
 		}
 
@@ -66,7 +66,7 @@ func TestAddContainersForEachAgent(t *testing.T) {
 	}
 
 	//Test
-	err = addContainersForEachAgent(s, &agents, &mockParser)
+	err = addContainersForEachAgent(s, &agents)
 	if err != nil {
 		t.Fail()
 	}
@@ -86,44 +86,46 @@ func TestAddContainersForEachAgent(t *testing.T) {
 	}
 }
 
-//
-// func TestAddImagesForEachAgent(t *testing.T) {
-// 	//Prepare
-// 	var s swarm.Swarm = &swarm.HTTPClientMock{"http://a_host"}
-// 	dOk := discovery.MockDiscoveryOk{"http://a_host"}
-// 	rawAgents, err := dOk.ListHosts()
-// 	mockParser := parsers.DockerClientParserMock{}
-//
-// 	agents := []parsers.DockerClientNode{}
-// 	for _, a := range rawAgents {
-// 		agent := parsers.DockerClientNode{
-// 			IP: a.IP,
-// 		}
-//
-// 		agents = append(agents, agent)
-// 	}
-//
-// 	//Test
-// 	err = addImagesForEachAgent(s, &agents, &mockParser)
-// 	if err != nil {
-// 		t.Fail()
-// 	}
-//
-// 	if err != nil {
-// 		t.Fatal("Assert failed when trying to get Agent Containers")
-// 	}
-//
-// 	if len(agents) == 0 {
-// 		log.Println(agents)
-// 		t.Fatal("No hosts has been created")
-// 	}
-//
-// 	if len(agents[0].Images) == 0 {
-// 		log.Println(agents[0])
-// 		t.Fatal("No Images has been added to host '0'")
-// 	}
-// }
-//
-// func TestGetFullInfo(t *testing.T) {
-//
-// }
+func TestAddImagesForEachAgent(t *testing.T) {
+	//Prepare
+	// var s swarm.Swarm = &swarm.HTTPClientMock{"http://a_host"}
+	s := swarm.GetClient(swarm.TYPE_MOCK_OK)
+	i := discovery.GetClient(swarm.TYPE_MOCK_OK)
+	rawAgents, err := i.ListHosts()
+
+	agents := []entities.Agent{}
+	for _, a := range rawAgents {
+		agent := entities.Agent{
+			IP: a.IP,
+		}
+
+		agents = append(agents, agent)
+	}
+
+	//Test
+	err = addImagesForEachAgent(s, &agents)
+	if err != nil {
+		t.Fail()
+	}
+
+	if err != nil {
+		t.Fatal("Assert failed when trying to get Agent Containers")
+	}
+
+	if len(agents) == 0 {
+		log.Println(agents)
+		t.Fatal("No hosts has been created")
+	}
+
+	if len(agents[0].Images) == 0 {
+		log.Println(agents[0])
+		t.Fatal("No Images has been added to host '0'")
+	}
+}
+
+func TestGetFullInfo(t *testing.T) {
+	s := swarm.GetClient(swarm.TYPE_MOCK_OK)
+	i := discovery.GetClient(swarm.TYPE_MOCK_OK)
+	info := GetFullInfo(s, i)
+	fmt.Println(info)
+}
