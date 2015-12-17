@@ -11,7 +11,7 @@ import (
 
 func getClusterInfo(s swarm.Swarm) (*dockerclient.Info, error) {
 	// Cluster info
-	byt, err := s.GetInfo()
+	byt, err := s.ListInfo()
 	if err != nil {
 		log.Println(err)
 		return nil, err
@@ -51,7 +51,7 @@ func getHostList(s swarm.Swarm, i discovery.InfoService) (*[]parsers.DockerClien
 func addAgentContainers(s swarm.Swarm, ag *[]parsers.DockerClientNode) {
 	//Foreach host, get its containers
 	for _, h := range *ag {
-		csb, err := s.GetContainers()
+		csb, err := s.ListContainers()
 		if err != nil {
 			return
 		}
@@ -68,7 +68,7 @@ func addAgentContainers(s swarm.Swarm, ag *[]parsers.DockerClientNode) {
 func addAgentImages(s swarm.Swarm, ag *[]parsers.DockerClientNode) {
 	//Foreach host, get its images
 	for _, h := range *ag {
-		isb, err := s.GetImages()
+		isb, err := s.ListImages()
 		if err != nil {
 			return
 		}
