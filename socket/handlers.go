@@ -1,73 +1,79 @@
 package socket
 
 import (
-	"encoding/json"
 	"log"
 
+	"github.com/samalba/dockerclient"
 	"github.com/sayden/docker-commander/discovery"
 	"github.com/sayden/docker-commander/parsers"
 	"github.com/sayden/docker-commander/swarm"
 )
 
-func getClusterInfo() {
-	s := swarm.GetClient()
-
+func getClusterInfo(s swarm.Swarm) (*dockerclient.Info, error) {
 	// Cluster info
-	r, err := s.GetInfo()
+	byt, err := s.GetInfo()
 	if err != nil {
-		log.Fatal(err)
-		return
+		log.Println(err)
+		return nil, err
 	}
 
-	var cData map[string]interface{}
-
-	if err := json.Unmarshal(r, &cData); err != nil {
-		log.Fatal(err)
+	p := parsers.DockerClientParser{}
+	i, err := p.ParseInfo(&byt)
+	if err != nil {
+		log.Println("ERROR:", err)
+		return nil, err
 	}
 
-	// c := cluster.Cluster{Info: &cData}
+	return &i, nil
+}
 
+func getHostList(s swarm.Swarm, i discovery.InfoService) (*[]parsers.DockerClientNode, error) {
 	//Get every host
-	d := discovery.GetClient()
-	hs, err := d.ListHosts()
+	hs, err := i.ListHosts()
 	if err != nil {
-		log.Fatal(err)
-		return
+		log.Println(err)
+		return nil, err
 	}
 
 	//Map byte Nodes to DockerClientNodes
-	var a []parsers.DockerClientNode
+	var agents []parsers.DockerClientNode
 	for _, d := range hs {
 		h := parsers.DockerClientNode{
 			IP: d.IP,
 		}
 
-		a = append(a, h)
+		agents = append(agents, h)
 	}
 
-	p := parsers.DockerClientParser{}
+	return &agents, nil
+}
 
+func addAgentContainers(s swarm.Swarm, ag *[]parsers.DockerClientNode) {
 	//Foreach host, get its containers
-	for _, h := range a {
+	for _, h := range *ag {
 		csb, err := s.GetContainers()
 		if err != nil {
 			return
 		}
 
+		p := parsers.DockerClientParser{}
 		cs, err := p.ParseContainer(&csb)
 		if err != nil {
 			return
 		}
 		h.Containers = cs
 	}
+}
 
+func addAgentImages(s swarm.Swarm, ag *[]parsers.DockerClientNode) {
 	//Foreach host, get its images
-	for _, h := range a {
+	for _, h := range *ag {
 		isb, err := s.GetImages()
 		if err != nil {
 			return
 		}
 
+		p := parsers.DockerClientParser{}
 		is, err := p.ParseImages(&isb)
 		if err != nil {
 			return
@@ -75,3 +81,8 @@ func getClusterInfo() {
 		h.Images = is
 	}
 }
+
+// GetFullInfo joins all available info of the cluster in a single response
+// func GetFullInfo() {
+// 	s := swarm.GetClient()
+// }
