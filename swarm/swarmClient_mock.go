@@ -3,7 +3,7 @@ package swarm
 import (
 	"encoding/json"
 
-	"github.com/samalba/dockerclient"
+	"github.com/sayden/docker-commander/Godeps/_workspace/src/github.com/samalba/dockerclient"
 )
 
 // HTTPClientMock is a struct to mock http.Client

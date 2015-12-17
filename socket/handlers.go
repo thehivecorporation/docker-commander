@@ -3,7 +3,7 @@ package socket
 import (
 	"log"
 
-	"github.com/samalba/dockerclient"
+	"github.com/sayden/docker-commander/Godeps/_workspace/src/github.com/samalba/dockerclient"
 	"github.com/sayden/docker-commander/discovery"
 	"github.com/sayden/docker-commander/entities"
 	"github.com/sayden/docker-commander/swarm"

@@ -1,7 +1,25 @@
 {
 	"ImportPath": "github.com/sayden/docker-commander",
 	"GoVersion": "go1.5.1",
+	"Packages": [
+		"./..."
+	],
 	"Deps": [
+		{
+			"ImportPath": "github.com/coreos/etcd/pkg/pathutil",
+			"Comment": "v2.3.0-alpha.0-170-g68a3962",
+			"Rev": "68a3962f6459c7a2f813ce9cbdb64447821381aa"
+		},
+		{
+			"ImportPath": "github.com/coreos/etcd/pkg/types",
+			"Comment": "v2.3.0-alpha.0-170-g68a3962",
+			"Rev": "68a3962f6459c7a2f813ce9cbdb64447821381aa"
+		},
+		{
+			"ImportPath": "github.com/docker/docker/pkg/units",
+			"Comment": "v1.4.1-8449-g8d36f09",
+			"Rev": "8d36f097cfe8fd3a4e6bed6123fb1fea24889c7b"
+		},
 		{
 			"ImportPath": "github.com/gin-gonic/gin",
 			"Comment": "v1.0rc1-148-g52fcc5d",
@@ -22,6 +40,19 @@
 		{
 			"ImportPath": "github.com/mattn/go-isatty",
 			"Rev": "56b76bdf51f7708750eac80fa38b952bb9f32639"
+		},
+		{
+			"ImportPath": "github.com/samalba/dockerclient",
+			"Rev": "4656b1bc6cbc06b75d65983475e4809cbd53ebb5"
+		},
+		{
+			"ImportPath": "github.com/sayden/etcd/client",
+			"Comment": "v2.3.0-alpha.0-184-ga976aa3",
+			"Rev": "a976aa3039d36647ac533903a80eaccaa77a7067"
+		},
+		{
+			"ImportPath": "github.com/ugorji/go/codec",
+			"Rev": "cd43bdd6be4b5675a0d1e75c4af55ee1dc0d9c5e"
 		},
 		{
 			"ImportPath": "golang.org/x/net/context",

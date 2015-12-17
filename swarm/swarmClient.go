@@ -1,6 +1,6 @@
 package swarm
 
-import "github.com/samalba/dockerclient"
+import "github.com/sayden/docker-commander/Godeps/_workspace/src/github.com/samalba/dockerclient"
 
 // Swarm is to uncouple http.Client library
 type Swarm interface {
