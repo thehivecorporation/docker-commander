@@ -1,7 +1,6 @@
 package socket
 
 import (
-	"fmt"
 	"log"
 	"testing"
 
@@ -127,5 +126,27 @@ func TestGetFullInfo(t *testing.T) {
 	s := swarm.GetClient(swarm.TYPE_MOCK_OK)
 	i := discovery.GetClient(swarm.TYPE_MOCK_OK)
 	info := GetFullInfo(s, i)
-	fmt.Println(info)
+
+	//Test some info
+	if info.Cluster.Containers != 102 {
+		t.Fail()
+	}
+
+	//Test there are some agents
+	if len(info.Agents) == 0 {
+		t.Fail()
+	}
+
+	if info.Agents[0].IP != "ip1" {
+		t.Fail()
+	}
+
+	if info.Agents[0].Containers[0].Id != "6514d918bc01b0df8098053086c72cf9e4e3f0b166987b5b5db78d1f6b783ea8" {
+		t.Fail()
+	}
+
+	if info.Agents[0].Images[0].Id != "e9ff33e7e5b9a683ab735bbe99450c50bd0b64c4e414d12c94ff93b345d3bb18" {
+		t.Fail()
+	}
+
 }

@@ -84,7 +84,7 @@ func addImagesForEachAgent(s swarm.Swarm, ag *[]entities.Agent) error {
 }
 
 // GetFullInfo joins all available info of the cluster in a single response
-func GetFullInfo(s swarm.Swarm, i discovery.InfoService) map[string]interface{} {
+func GetFullInfo(s swarm.Swarm, i discovery.InfoService) entities.Overall {
 	cluster, err := getClusterInfo(s)
 	if err != nil {
 		log.Println(err)
@@ -98,9 +98,8 @@ func GetFullInfo(s swarm.Swarm, i discovery.InfoService) map[string]interface{} 
 
 	addImagesForEachAgent(s, &agentsNodes)
 
-	info := make(map[string]interface{})
-	info["clusterInfo"] = cluster
-	info["agents"] = agentsNodes
-
-	return info
+	return entities.Overall{
+		Cluster: *cluster,
+		Agents:  agentsNodes,
+	}
 }
