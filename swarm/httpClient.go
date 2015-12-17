@@ -35,14 +35,36 @@ func (c *HTTPClient) ListInfo() (dockerclient.Info, error) {
 
 // ListContainers returns the Containers of a specific host. . Replicates
 // GET [docker-host]:2375/containers/json
-func (c *HTTPClient) ListContainers() ([]byte, error) {
-	return c.makeHTTPGetRequest("/containers/json")
+func (c *HTTPClient) ListContainers() ([]dockerclient.Container, error) {
+	i, err := c.makeHTTPGetRequest("/containers/json")
+	if err != nil {
+		return []dockerclient.Container{}, err
+	}
+	jsonCs := []dockerclient.Container{}
+	err = json.Unmarshal(i, &jsonCs)
+
+	if err != nil {
+		return jsonCs, err
+	}
+
+	return jsonCs, nil
 }
 
 // ListImages returns the Images of a specific host. Replicates
 // GET [docker-host]:2375/images/json
-func (c *HTTPClient) ListImages() ([]byte, error) {
-	return c.makeHTTPGetRequest("/images/json")
+func (c *HTTPClient) ListImages() ([]dockerclient.Image, error) {
+	i, err := c.makeHTTPGetRequest("/images/json")
+	if err != nil {
+		return []dockerclient.Image{}, err
+	}
+	jsonCs := []dockerclient.Image{}
+	err = json.Unmarshal(i, &jsonCs)
+
+	if err != nil {
+		return jsonCs, err
+	}
+
+	return jsonCs, nil
 }
 
 //TODO The URL must have HTTP en port included
