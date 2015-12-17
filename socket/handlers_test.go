@@ -33,6 +33,10 @@ func TestGetHostsList(t *testing.T) {
 		t.Fatal("Error trying to get hosts list")
 	}
 
+	if hs[0].IP != "ip1" {
+		t.Fatal("Host[0].IP is not the expected result")
+	}
+
 	s = &swarm.HTTPClientMockError{"http://a_host"}
 	dError := discovery.MockDiscoveryError{"http://a_host"}
 	hs, err = getHostList(s, &dError)
