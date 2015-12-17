@@ -50,7 +50,7 @@ func getAgentsList(i discovery.InfoService) ([]parsers.DockerClientNode, error) 
 
 func addContainersForEachAgent(s swarm.Swarm, ag *[]parsers.DockerClientNode) error {
 	if len(*ag) == 0 {
-		log.Println("ERROR: There are no agents in the request")
+		log.Println("ERROR: There are no agents in ag parameter")
 	}
 
 	//Foreach host, get its containers
@@ -66,6 +66,30 @@ func addContainersForEachAgent(s swarm.Swarm, ag *[]parsers.DockerClientNode) er
 			return err
 		}
 		h.Containers = cs
+	}
+
+	return nil
+}
+
+func addImagesForEachAgent(s swarm.Swarm, ag *[]parsers.DockerClientNode) error {
+	if len(*ag) == 0 {
+		log.Println("ERROR: There are no agents in ag parameter")
+	}
+
+	//Foreach host, get its images
+	for _, h := range *ag {
+		isb, err := s.ListImages()
+		if err != nil {
+			return err
+		}
+
+		p := parsers.DockerClientParser{}
+		is, err := p.ParseImages(&isb)
+		if err != nil {
+			return err
+		}
+
+		h.Images = is
 	}
 
 	return nil

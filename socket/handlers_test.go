@@ -81,3 +81,26 @@ func TestAddContainersForEachAgent(t *testing.T) {
 		t.Fatal("An error was expected")
 	}
 }
+
+func TestAddImagesForEachAgent(t *testing.T) {
+	var s swarm.Swarm = &swarm.HTTPClientMock{"http://a_host"}
+	dOk := discovery.MockDiscoveryOk{"http://a_host"}
+	agents, err := getAgentsList(&dOk)
+	if err != nil {
+		t.Fatal("Error trying to get hosts list")
+	}
+
+	err = addImagesForEachAgent(s, &agents)
+
+	if err != nil {
+		t.Fatal("Assert failed when trying to get Agent Containers")
+	}
+
+	if len(agents) == 0 {
+		t.Fatal("No hosts has been created")
+	}
+
+	if agents[0].IP != "ip1" {
+		t.Fatal("No image has been added to host 0")
+	}
+}
