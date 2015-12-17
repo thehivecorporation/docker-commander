@@ -14,7 +14,7 @@ func TestIsErrorInURL(t *testing.T) {
 
 func TestGetHosts(t *testing.T) {
 	mock := HTTPClientMock{Host: "http://some_url"}
-	c, err := GetInfo(&mock)
+	c, err := mock.ListInfo()
 
 	if err != nil {
 		t.Fatal(err)
@@ -38,7 +38,7 @@ func TestGetHosts(t *testing.T) {
 
 func TestGetContainers(t *testing.T) {
 	mock := HTTPClientMock{Host: "http://some_url"}
-	c, err := GetContainers(&mock)
+	c, err := mock.ListContainers()
 
 	if err != nil {
 		t.Fatal(err)
@@ -67,7 +67,7 @@ func TestGetContainers(t *testing.T) {
 
 func TestGetImages(t *testing.T) {
 	mock := HTTPClientMock{Host: "http://some_url"}
-	c, err := GetImages(&mock)
+	c, err := mock.ListImages()
 
 	if err != nil {
 		t.Fatal(err)
