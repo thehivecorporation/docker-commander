@@ -18,6 +18,7 @@ func (c *MockDiscoveryOk) ListHosts() ([]Node, error) {
 
 	return ns, nil
 }
+
 func (c *MockDiscoveryOk) WatchHosts() {}
 
 //ListHosts Error
@@ -26,4 +27,5 @@ func (c *MockDiscoveryError) ListHosts() ([]Node, error) {
 
 	return nil, e
 }
+
 func (c *MockDiscoveryError) WatchHosts() {}
