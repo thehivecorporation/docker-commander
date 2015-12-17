@@ -11,16 +11,9 @@ import (
 
 func getClusterInfo(s swarm.Swarm) (*dockerclient.Info, error) {
 	// Cluster info
-	byt, err := s.ListInfo()
+	i, err := s.ListInfo()
 	if err != nil {
 		log.Println(err)
-		return nil, err
-	}
-
-	p := parsers.DockerClientParser{}
-	i, err := p.ParseInfo(&byt)
-	if err != nil {
-		log.Println("ERROR:", err)
 		return nil, err
 	}
 
@@ -58,42 +51,65 @@ func addContainersForEachAgent(s swarm.Swarm, ag *[]parsers.DockerClientNode, p 
 	//Foreach host, get its containers
 	for i := range agents {
 		h := &agents[i]
-		csb, err := s.ListContainers()
+		cs, err := s.ListContainers()
 		if err != nil {
 			return err
 		}
 
-		cs, err := p.ParseContainer(&csb)
-		if err != nil {
-			return err
-		}
 		h.Containers = cs
 	}
 
 	return nil
 }
 
-func addImagesForEachAgent(s swarm.Swarm, ag *[]parsers.DockerClientNode, p parsers.ImageParser) error {
-	if len(*ag) == 0 {
-		log.Println("ERROR: There are no agents in ag parameter")
-	}
-
-	agents := *ag
-
-	//Foreach host, get its containers
-	for i := range agents {
-		h := &agents[i]
-		isb, err := s.ListImages()
-		if err != nil {
-			return err
-		}
-
-		is, err := p.ParseImages(&isb)
-		if err != nil {
-			return err
-		}
-		h.Images = is
-	}
-
-	return nil
-}
+//
+// func addImagesForEachAgent(s swarm.Swarm, ag *[]parsers.DockerClientNode, p parsers.ImageParser) error {
+// 	if len(*ag) == 0 {
+// 		log.Println("ERROR: There are no agents in ag parameter")
+// 	}
+//
+// 	agents := *ag
+//
+// 	//Foreach host, get its containers
+// 	for i := range agents {
+// 		h := &agents[i]
+// 		isb, err := s.ListImages()
+// 		if err != nil {
+// 			return err
+// 		}
+//
+// 		is, err := p.ParseImages(&isb)
+// 		if err != nil {
+// 			return err
+// 		}
+// 		h.Images = is
+// 	}
+//
+// 	return nil
+// }
+//
+// // GetFullInfo joins all available info of the cluster in a single response
+// func GetFullInfo() int {
+// 	s := swarm.GetClient(swarm.TYPE_ENV)
+// 	i := discovery.GetClient(swarm.TYPE_ENV)
+//
+// 	cluster, err := getClusterInfo(s)
+// 	if err != nil {
+// 		log.Println(err)
+// 	}
+// 	agentsNodes, err := getAgentsList(i)
+// 	if err != nil {
+// 		log.Println(err)
+// 	}
+//
+// 	parsers := parsers.DockerClientParser{}
+// 	addContainersForEachAgent(s, &agentsNodes, parsers)
+//
+// 	addImagesForEachAgent(s, &agentsNodes, parsers)
+//
+// 	info := map[string]interface{}{}
+// 	info["clusterInfo"] = cluster
+// 	info["agents"] = agents
+//
+// 	return info
+// }

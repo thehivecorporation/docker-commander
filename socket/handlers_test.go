@@ -86,39 +86,44 @@ func TestAddContainersForEachAgent(t *testing.T) {
 	}
 }
 
-func TestAddImagesForEachAgent(t *testing.T) {
-	//Prepare
-	var s swarm.Swarm = &swarm.HTTPClientMock{"http://a_host"}
-	dOk := discovery.MockDiscoveryOk{"http://a_host"}
-	rawAgents, err := dOk.ListHosts()
-	mockParser := parsers.DockerClientParserMock{}
-
-	agents := []parsers.DockerClientNode{}
-	for _, a := range rawAgents {
-		agent := parsers.DockerClientNode{
-			IP: a.IP,
-		}
-
-		agents = append(agents, agent)
-	}
-
-	//Test
-	err = addImagesForEachAgent(s, &agents, &mockParser)
-	if err != nil {
-		t.Fail()
-	}
-
-	if err != nil {
-		t.Fatal("Assert failed when trying to get Agent Containers")
-	}
-
-	if len(agents) == 0 {
-		log.Println(agents)
-		t.Fatal("No hosts has been created")
-	}
-
-	if len(agents[0].Images) == 0 {
-		log.Println(agents[0])
-		t.Fatal("No Images has been added to host '0'")
-	}
-}
+//
+// func TestAddImagesForEachAgent(t *testing.T) {
+// 	//Prepare
+// 	var s swarm.Swarm = &swarm.HTTPClientMock{"http://a_host"}
+// 	dOk := discovery.MockDiscoveryOk{"http://a_host"}
+// 	rawAgents, err := dOk.ListHosts()
+// 	mockParser := parsers.DockerClientParserMock{}
+//
+// 	agents := []parsers.DockerClientNode{}
+// 	for _, a := range rawAgents {
+// 		agent := parsers.DockerClientNode{
+// 			IP: a.IP,
+// 		}
+//
+// 		agents = append(agents, agent)
+// 	}
+//
+// 	//Test
+// 	err = addImagesForEachAgent(s, &agents, &mockParser)
+// 	if err != nil {
+// 		t.Fail()
+// 	}
+//
+// 	if err != nil {
+// 		t.Fatal("Assert failed when trying to get Agent Containers")
+// 	}
+//
+// 	if len(agents) == 0 {
+// 		log.Println(agents)
+// 		t.Fatal("No hosts has been created")
+// 	}
+//
+// 	if len(agents[0].Images) == 0 {
+// 		log.Println(agents[0])
+// 		t.Fatal("No Images has been added to host '0'")
+// 	}
+// }
+//
+// func TestGetFullInfo(t *testing.T) {
+//
+// }
