@@ -4,7 +4,7 @@ import "testing"
 
 func TestClientMockOk(t *testing.T) {
 	i := MockDiscoveryOk{Host: "mockIp"}
-	r, err := ListHosts(&i)
+	r, err := i.ListHosts()
 
 	if err != nil {
 		t.Fail()
@@ -17,7 +17,7 @@ func TestClientMockOk(t *testing.T) {
 
 func TestClientMockError(t *testing.T) {
 	i := MockDiscoveryError{Host: "mockIp"}
-	_, err := ListHosts(&i)
+	_, err := i.ListHosts()
 
 	if err == nil {
 		t.Fail()
