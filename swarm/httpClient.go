@@ -1,12 +1,15 @@
 package swarm
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"strings"
+
+	"github.com/samalba/dockerclient"
 )
 
 // HTTPClient implementation to access swarm info
@@ -15,8 +18,19 @@ type HTTPClient struct {
 }
 
 // ListInfo Rest implementation
-func (c *HTTPClient) ListInfo() ([]byte, error) {
-	return c.makeHTTPGetRequest("/info")
+func (c *HTTPClient) ListInfo() (dockerclient.Info, error) {
+	i, err := c.makeHTTPGetRequest("/info")
+	if err != nil {
+		return dockerclient.Info{}, err
+	}
+	jsonCs := dockerclient.Info{}
+	err = json.Unmarshal(i, &jsonCs)
+
+	if err != nil {
+		return jsonCs, err
+	}
+
+	return jsonCs, nil
 }
 
 // ListContainers returns the Containers of a specific host. . Replicates
