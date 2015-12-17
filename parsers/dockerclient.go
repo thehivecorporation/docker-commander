@@ -24,13 +24,6 @@ type InfoParser interface {
 	ParseInfo(i *[]byte) (dockerclient.Info, error)
 }
 
-// DockerClientNode is a holder for a full structure
-type DockerClientNode struct {
-	IP         string
-	Containers []dockerclient.Container
-	Images     []dockerclient.Image
-}
-
 // ParseContainer parses a []byte to dockerclient.Container objects
 func (d *DockerClientParser) ParseContainer(cs *[]byte) ([]dockerclient.Container, error) {
 	jsonCs := []dockerclient.Container{}

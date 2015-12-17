@@ -27,7 +27,7 @@ func getClusterInfo(s swarm.Swarm) (*dockerclient.Info, error) {
 	return &i, nil
 }
 
-func getHostList(s swarm.Swarm, i discovery.InfoService) ([]parsers.DockerClientNode, error) {
+func getAgentsList(i discovery.InfoService) ([]parsers.DockerClientNode, error) {
 	//Get every host
 	hs, err := i.ListHosts()
 	if err != nil {
@@ -48,41 +48,25 @@ func getHostList(s swarm.Swarm, i discovery.InfoService) ([]parsers.DockerClient
 	return agents, nil
 }
 
-func addAgentContainers(s swarm.Swarm, ag []parsers.DockerClientNode) {
+func addContainersForEachAgent(s swarm.Swarm, ag *[]parsers.DockerClientNode) error {
+	if len(*ag) == 0 {
+		log.Println("ERROR: There are no agents in the request")
+	}
+
 	//Foreach host, get its containers
-	for _, h := range ag {
+	for _, h := range *ag {
 		csb, err := s.ListContainers()
 		if err != nil {
-			return
+			return err
 		}
 
 		p := parsers.DockerClientParser{}
 		cs, err := p.ParseContainer(&csb)
 		if err != nil {
-			return
+			return err
 		}
 		h.Containers = cs
 	}
+
+	return nil
 }
-
-func addAgentImages(s swarm.Swarm, ag []parsers.DockerClientNode) {
-	//Foreach host, get its images
-	for _, h := range ag {
-		isb, err := s.ListImages()
-		if err != nil {
-			return
-		}
-
-		p := parsers.DockerClientParser{}
-		is, err := p.ParseImages(&isb)
-		if err != nil {
-			return
-		}
-		h.Images = is
-	}
-}
-
-// GetFullInfo joins all available info of the cluster in a single response
-// func GetFullInfo() {
-// 	s := swarm.GetClient()
-// }
