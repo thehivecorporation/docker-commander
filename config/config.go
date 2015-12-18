@@ -15,7 +15,7 @@ const ZOOKEEPER = 2
 const DISCOVERY_SERVICE = ETCD
 
 // ETCD host
-const ETCD_HOST_DEVELOPMENT string = "http://127.0.0.1:2379"
+const ETCD_HOST_DEVELOPMENT string = "http://192.168.1.35:2379"
 const ETCD_HOST_PRODUCTION string = "http://127.0.0.1:2379"
 
 // Consul host

@@ -8,7 +8,7 @@ import (
 )
 
 func TestEtcdClientIntegration(t *testing.T) {
-	e := discovery.EtcdClient{Host: config.ETCD_HOST}
+	e := discovery.EtcdClient{Host: config.ETCD_HOST_DEVELOPMENT}
 	r, err := e.ListHosts()
 
 	if err != nil {
