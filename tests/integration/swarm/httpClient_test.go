@@ -1,7 +1,6 @@
 package restClient
 
 import (
-	"encoding/json"
 	"testing"
 
 	"github.com/sayden/docker-commander/config"
@@ -9,76 +8,58 @@ import (
 )
 
 func TestGetHosts(t *testing.T) {
-	h := swarm.HTTPClient{Host: config.SWARM_MANAGER}
-	r, err := swarm.GetHosts(&h)
+	h := swarm.HTTPClient{Host: config.SWARM_MANAGER_DEVELOPMENT}
+	r, err := h.ListInfo()
 
 	if err != nil {
 		t.Fail()
 	}
 
-	var dat map[string]interface{}
-
-	if err := json.Unmarshal(r, &dat); err != nil {
-		t.Fatal(err)
-	}
-
-	if dat["DriverStatus"] == nil {
+	if r.DriverStatus == nil {
 		t.Fail()
 	}
 }
 
 func TestGetContainers(t *testing.T) {
-	h := swarm.HTTPClient{Host: "http://192.168.1.35:2375"}
-	r, err := swarm.GetContainers(&h)
+	h := swarm.HTTPClient{Host: config.SWARM_MANAGER_DEVELOPMENT}
+	r, err := h.ListContainers()
 
 	if err != nil {
 		t.Fatal("Error trying to get containers")
 	}
 
-	var dat []map[string]interface{}
-
-	if err := json.Unmarshal(r, &dat); err != nil {
-		t.Fatal(err)
-	}
-
-	if len(dat) == 0 {
+	if len(r) == 0 {
 		t.Log("No containers found")
 	} else {
-		c := dat[0]
-		if c["Id"] == nil {
+		c := r[0]
+		if c.Id == "" {
 			t.Fail()
 		}
 
-		if (c["Image"]) == nil {
+		if c.Image == "" {
 			t.Fail()
 		}
 	}
 }
 
 func TestGetImages(t *testing.T) {
-	h := swarm.HTTPClient{Host: "http://192.168.1.35:2375"}
-	r, err := swarm.GetImages(&h)
+	h := swarm.HTTPClient{Host: config.SWARM_MANAGER_DEVELOPMENT}
+	r, err := h.ListImages()
 
 	if err != nil {
 		t.Fatal("Error trying to get containers")
 	}
 
-	var dat []map[string]interface{}
-
-	if err := json.Unmarshal(r, &dat); err != nil {
-		t.Fatal(err)
-	}
-
-	if len(dat) == 0 {
+	if len(r) == 0 {
 		t.Log("No Images found")
 	} else {
-		c := dat[0]
-		if c["Id"] == nil {
+		c := r[0]
+		if c.Id == "" {
 			t.Fatal("'Id' not found")
 		}
 
-		if (c["RepoTags"]) == nil {
-			t.Fatal("'RepoTags' not found")
+		if len(c.RepoTags) == 0 {
+			t.Fatal("'RepoTags' size is zero")
 		}
 	}
 }

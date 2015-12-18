@@ -28,6 +28,22 @@
         setInterval(
           function(){ send(JSON.stringify(json)) }
         , 1000 )
+
+        var json2 = {
+          action: "agent:containers",
+          ip:"http://put_ip_here"
+        };
+        setInterval(
+          function(){ send(JSON.stringify(json2)) }
+        , 1000 )
+
+        var json3 = {
+          action: "agent:images",
+          ip:"http://put_ip_here"
+        };
+        setInterval(
+          function(){ send(JSON.stringify(json3)) }
+        , 1000 )
       }
     </script>
 

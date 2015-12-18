@@ -62,6 +62,25 @@ func addContainersForEachAgent(s swarm.Swarm, ag *[]entities.Agent) error {
 	return nil
 }
 
+// GetContainers uses a Swarm client to return some ip's containers
+func GetContainers(s swarm.Swarm, ip string) (*[]dockerclient.Container, error) {
+	cs, err := s.ListContainers()
+	if err != nil {
+		return &[]dockerclient.Container{}, err
+	}
+
+	return &cs, nil
+}
+
+func GetImages(s swarm.Swarm, ip string) (*[]dockerclient.Image, error) {
+	is, err := s.ListImages()
+	if err != nil {
+		return &[]dockerclient.Image{}, err
+	}
+
+	return &is, nil
+}
+
 func addImagesForEachAgent(s swarm.Swarm, ag *[]entities.Agent) error {
 	if len(*ag) == 0 {
 		log.Println("ERROR: There are no agents in ag parameter")
@@ -84,22 +103,30 @@ func addImagesForEachAgent(s swarm.Swarm, ag *[]entities.Agent) error {
 }
 
 // GetFullInfo joins all available info of the cluster in a single response
-func GetFullInfo(s swarm.Swarm, i discovery.InfoService) entities.Overall {
+func GetFullInfo(s swarm.Swarm, i discovery.InfoService) (entities.Overall, error) {
 	cluster, err := getClusterInfo(s)
 	if err != nil {
 		log.Println(err)
+		return entities.Overall{}, err
 	}
 	agentsNodes, err := getAgentsList(i)
 	if err != nil {
 		log.Println(err)
+		return entities.Overall{}, err
 	}
 
-	addContainersForEachAgent(s, &agentsNodes)
+	err = addContainersForEachAgent(s, &agentsNodes)
+	if err != nil {
+		return entities.Overall{}, err
+	}
 
-	addImagesForEachAgent(s, &agentsNodes)
+	err = addImagesForEachAgent(s, &agentsNodes)
+	if err != nil {
+		return entities.Overall{}, err
+	}
 
 	return entities.Overall{
 		Cluster: *cluster,
 		Agents:  agentsNodes,
-	}
+	}, nil
 }

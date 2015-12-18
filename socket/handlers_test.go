@@ -10,8 +10,8 @@ import (
 )
 
 func TestGetClusterInfo(t *testing.T) {
-	s := swarm.GetClient(swarm.TYPE_MOCK_OK)
-	i, err := getClusterInfo(s)
+	s := swarm.HTTPClientMock{"http://a_host"}
+	i, err := getClusterInfo(&s)
 	if err != nil {
 		t.Fatal("Error trying to get cluster info")
 	}
@@ -20,16 +20,16 @@ func TestGetClusterInfo(t *testing.T) {
 		t.Fatal("Containers assertion failed")
 	}
 
-	s = swarm.GetClient(swarm.TYPE_MOCK_ERROR)
-	i, err = getClusterInfo(s)
+	sErr := swarm.HTTPClientMockError{"http://a_host"}
+	i, err = getClusterInfo(&sErr)
 	if err == nil {
 		t.Fatal("There is no error after passing an incorrect json")
 	}
 }
 
 func TestGetAgentsList(t *testing.T) {
-	i := discovery.GetClient(swarm.TYPE_MOCK_OK)
-	hs, err := getAgentsList(i)
+	i := discovery.MockDiscoveryOk{"http://a_host"}
+	hs, err := getAgentsList(&i)
 	if err != nil {
 		t.Fatal("Error trying to get hosts list")
 	}
@@ -38,8 +38,8 @@ func TestGetAgentsList(t *testing.T) {
 		t.Fatal("Host[0].IP is not the expected result")
 	}
 
-	i = discovery.GetClient(swarm.TYPE_MOCK_ERROR)
-	hs, err = getAgentsList(i)
+	iErr := discovery.MockDiscoveryError{"http://a_host"}
+	hs, err = getAgentsList(&iErr)
 	if err == nil {
 		t.Fatal("No error after passing a malformed json")
 	}
@@ -51,8 +51,7 @@ func TestGetAgentsList(t *testing.T) {
 
 func TestAddContainersForEachAgent(t *testing.T) {
 	//Prepare
-	s := swarm.GetClient(swarm.TYPE_MOCK_OK)
-	i := discovery.GetClient(swarm.TYPE_MOCK_OK)
+	i := discovery.MockDiscoveryOk{"http://a_host"}
 	rawAgents, err := i.ListHosts()
 
 	agents := []entities.Agent{}
@@ -65,7 +64,8 @@ func TestAddContainersForEachAgent(t *testing.T) {
 	}
 
 	//Test
-	err = addContainersForEachAgent(s, &agents)
+	s := swarm.HTTPClientMock{"http://a_host"}
+	err = addContainersForEachAgent(&s, &agents)
 	if err != nil {
 		t.Fail()
 	}
@@ -85,11 +85,24 @@ func TestAddContainersForEachAgent(t *testing.T) {
 	}
 }
 
+func TestGetContainers(t *testing.T) {
+	s := swarm.HTTPClientMock{"http://a_host"}
+	ip := "http://non_important_string"
+
+	cs, err := GetContainers(&s, ip)
+	if err != nil {
+		t.Fatal("Error trying to get containers")
+	}
+
+	if len(*cs) == 0 {
+		t.Fatal("Containers must be over `0`")
+	}
+}
+
 func TestAddImagesForEachAgent(t *testing.T) {
 	//Prepare
-	// var s swarm.Swarm = &swarm.HTTPClientMock{"http://a_host"}
-	s := swarm.GetClient(swarm.TYPE_MOCK_OK)
-	i := discovery.GetClient(swarm.TYPE_MOCK_OK)
+	s := swarm.HTTPClientMock{"http://a_host"}
+	i := discovery.MockDiscoveryOk{"http://a_host"}
 	rawAgents, err := i.ListHosts()
 
 	agents := []entities.Agent{}
@@ -102,7 +115,7 @@ func TestAddImagesForEachAgent(t *testing.T) {
 	}
 
 	//Test
-	err = addImagesForEachAgent(s, &agents)
+	err = addImagesForEachAgent(&s, &agents)
 	if err != nil {
 		t.Fail()
 	}
@@ -123,9 +136,12 @@ func TestAddImagesForEachAgent(t *testing.T) {
 }
 
 func TestGetFullInfo(t *testing.T) {
-	s := swarm.GetClient(swarm.TYPE_MOCK_OK)
-	i := discovery.GetClient(swarm.TYPE_MOCK_OK)
-	info := GetFullInfo(s, i)
+	s := swarm.HTTPClientMock{"http://a_host"}
+	i := discovery.MockDiscoveryOk{"http://a_host"}
+	info, err := GetFullInfo(&s, &i)
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	//Test some info
 	if info.Cluster.Containers != 102 {
