@@ -39,6 +39,8 @@ func GetClient(cType int) Swarm {
 
 // GetClientWithIP returns a configured client with the specified ip
 func GetClientWithIP(ip string) Swarm {
-	s := HTTPClient{Host: ip}
-	return &s
+	if config.CURRENT_ENV == config.DEVELOPMENT {
+		return &HTTPClientMock{"http://a_host"}
+	}
+	return &HTTPClient{Host: ip}
 }

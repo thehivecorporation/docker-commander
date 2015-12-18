@@ -2,6 +2,7 @@ package routes
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"log"
 
@@ -61,27 +62,65 @@ func messageHandler(conn *websocket.Conn, s swarm.Swarm, i discovery.InfoService
 			//Ask cluster state
 			info, err := socket.GetFullInfo(s, i)
 			if err != nil {
-				conn.WriteMessage(t, []byte(err.Error()))
+				log.Fatal(err)
+				sendMessage(err, conn, t)
 			} else {
-				json, err := json.Marshal(info)
-				var res []byte
-				if err != nil {
-					res = []byte(err.Error())
-				} else {
-					res = json
-				}
-				conn.WriteMessage(t, res)
+				sendMessage(info, conn, t)
 			}
 		case "agent:containers":
 			//TODO Gets containers of some swarm agent
-			fmt.Println("Not yet implemented")
+			ipI := jsonMsg["ip"]
+			if ip, ok := ipI.(string); ok {
+				s = swarm.GetClientWithIP(ip)
+				info, err := socket.GetContainers(s, ip)
+				if err != nil {
+					log.Fatal(err)
+					sendMessage(err, conn, t)
+					log.Fatal("Error trying to get containers list")
+				} else {
+					sendMessage(info, conn, t)
+				}
+			} else {
+				err = errors.New("Error trying to get containers")
+				log.Fatal(err)
+				sendMessage(err, conn, t)
+			}
+
 		case "agent:images":
 			//TODO Gets images of some swarm agent
-			fmt.Println("Not yet implemented")
+			ipI := jsonMsg["ip"]
+			if ip, ok := ipI.(string); ok {
+				s = swarm.GetClientWithIP(ip)
+				info, err := socket.GetImages(s, ip)
+				if err != nil {
+					log.Fatal(err)
+					sendMessage(err, conn, t)
+					log.Fatal("Error trying to get images list")
+				} else {
+					sendMessage(info, conn, t)
+				}
+			} else {
+				err = errors.New("Error trying to get images")
+				log.Fatal(err)
+				sendMessage(err, conn, t)
+			}
 		default:
 			fmt.Println("Handle message")
 			conn.WriteMessage(t, msg)
 		}
 
 	}
+}
+
+func sendMessage(data interface{}, conn *websocket.Conn, t int) {
+	//Ask cluster state
+	var res []byte
+	json, err := json.Marshal(data)
+	if err != nil {
+		res = []byte(err.Error())
+	} else {
+		res = json
+	}
+	conn.WriteMessage(t, res)
+
 }

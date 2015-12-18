@@ -68,8 +68,17 @@ func GetContainers(s swarm.Swarm, ip string) (*[]dockerclient.Container, error) 
 	if err != nil {
 		return &[]dockerclient.Container{}, err
 	}
-	
+
 	return &cs, nil
+}
+
+func GetImages(s swarm.Swarm, ip string) (*[]dockerclient.Image, error) {
+	is, err := s.ListImages()
+	if err != nil {
+		return &[]dockerclient.Image{}, err
+	}
+
+	return &is, nil
 }
 
 func addImagesForEachAgent(s swarm.Swarm, ag *[]entities.Agent) error {
