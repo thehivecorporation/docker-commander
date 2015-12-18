@@ -62,6 +62,16 @@ func addContainersForEachAgent(s swarm.Swarm, ag *[]entities.Agent) error {
 	return nil
 }
 
+// GetContainers uses a Swarm client to return some ip's containers
+func GetContainers(s swarm.Swarm, ip string) (*[]dockerclient.Container, error) {
+	cs, err := s.ListContainers()
+	if err != nil {
+		return &[]dockerclient.Container{}, err
+	}
+	
+	return &cs, nil
+}
+
 func addImagesForEachAgent(s swarm.Swarm, ag *[]entities.Agent) error {
 	if len(*ag) == 0 {
 		log.Println("ERROR: There are no agents in ag parameter")

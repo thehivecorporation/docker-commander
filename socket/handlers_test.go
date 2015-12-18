@@ -85,6 +85,20 @@ func TestAddContainersForEachAgent(t *testing.T) {
 	}
 }
 
+func TestGetContainers(t *testing.T) {
+	s := swarm.GetClient(swarm.TYPE_MOCK_OK)
+	ip := "http://non_important_string"
+
+	cs, err := GetContainers(s, ip)
+	if err != nil {
+		t.Fatal("Error trying to get containers")
+	}
+
+	if len(*cs) == 0 {
+		t.Fatal("Containers must be over `0`")
+	}
+}
+
 func TestAddImagesForEachAgent(t *testing.T) {
 	//Prepare
 	// var s swarm.Swarm = &swarm.HTTPClientMock{"http://a_host"}
