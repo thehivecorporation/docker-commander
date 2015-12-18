@@ -11,8 +11,8 @@ import (
 func main() {
 	ginApp := gin.Default()
 
-	s := swarm.GetClient(swarm.TYPE_MOCK_OK)
-	i := discovery.GetClient(discovery.TYPE_MOCK_OK)
+	s := swarm.GetClient()
+	i := discovery.GetClient()
 
 	routes.Init(ginApp, s, i)
 

@@ -4,7 +4,8 @@ package config
 const APP_PORT string = ":8000"
 
 // SWARM_MANAGER host names
-const SWARM_MANAGER string = "http://192.168.1.35:8081"
+const SWARM_MANAGER_DEVELOPMENT string = "http://192.168.1.35:8081"
+const SWARM_MANAGER_PRODUCTION string = "http://192.168.1.35:8081"
 
 // Discovery services
 
