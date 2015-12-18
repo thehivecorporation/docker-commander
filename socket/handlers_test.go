@@ -125,7 +125,10 @@ func TestAddImagesForEachAgent(t *testing.T) {
 func TestGetFullInfo(t *testing.T) {
 	s := swarm.GetClient(swarm.TYPE_MOCK_OK)
 	i := discovery.GetClient(swarm.TYPE_MOCK_OK)
-	info := GetFullInfo(s, i)
+	info, err := GetFullInfo(s, i)
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	//Test some info
 	if info.Cluster.Containers != 102 {

@@ -3,7 +3,7 @@ language: go
 go:
   - tip
 
-install:
+install: true
 
 script:
   - "go test -cover `go list ./... | grep -v tests`"
