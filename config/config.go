@@ -8,22 +8,26 @@ const SWARM_MANAGER string = "http://192.168.1.35:8081"
 
 // Discovery services
 
-// ETCD host
-const ETCD_HOST string = "http://127.0.0.1:2379"
-
-// Consul host
-const CONSUL_HOST string = "http://127.0.0.1:2375"
-
-//Zookeeper host
-const ZOOKEEPER_HOST string = "http://127.0.0.1:2375"
-
 const ETCD = 0
 const CONSUL = 1
 const ZOOKEEPER = 2
 const DISCOVERY_SERVICE = ETCD
 
-//Environments
-const DEVELOPMENT = 0
-const PRODUCTION = 1
+// ETCD host
+const ETCD_HOST_DEVELOPMENT string = "http://127.0.0.1:2379"
+const ETCD_HOST_PRODUCTION string = "http://127.0.0.1:2379"
 
-const CURRENT_ENV = DEVELOPMENT
+// Consul host
+const CONSUL_HOST_DEVELOPMENT string = "http://127.0.0.1:2375"
+const CONSUL_HOST_PRODUCTION string = "http://127.0.0.1:2375"
+
+//Zookeeper host
+const ZOOKEEPER_HOST_DEVELOPMENT string = "http://127.0.0.1:2375"
+const ZOOKEEPER_HOST_PRODUCTION string = "http://127.0.0.1:2375"
+
+//Environments
+const MOCK = 0
+const DEVELOPMENT = 1
+const PRODUCTION = 2
+
+const CURRENT_ENV = MOCK
