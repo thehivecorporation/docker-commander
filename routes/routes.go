@@ -45,7 +45,7 @@ func initWebSocket(c *gin.Context, s swarm.Swarm, i discovery.InfoService) {
 
 func messageHandler(conn *websocket.Conn, s swarm.Swarm, i discovery.InfoService) {
 	for {
-		t, msg, err := conn.ReadMessage()
+		msgType, msg, err := conn.ReadMessage()
 		if err != nil {
 			break
 		}
@@ -63,9 +63,9 @@ func messageHandler(conn *websocket.Conn, s swarm.Swarm, i discovery.InfoService
 			info, err := socket.GetFullInfo(s, i)
 			if err != nil {
 				log.Fatal(err)
-				sendMessage(err, conn, t)
+				sendMessage(err, conn, msgType)
 			} else {
-				sendMessage(info, conn, t)
+				sendMessage(info, conn, msgType)
 			}
 		case "agent:containers":
 			//TODO Gets containers of some swarm agent
@@ -74,45 +74,42 @@ func messageHandler(conn *websocket.Conn, s swarm.Swarm, i discovery.InfoService
 				s = swarm.GetClientWithIP(ip)
 				info, err := socket.GetContainers(s, ip)
 				if err != nil {
-					log.Fatal(err)
-					sendMessage(err, conn, t)
-					log.Fatal("Error trying to get containers list")
+					log.Fatal("Error trying to get containers list", err)
+					sendMessage(err, conn, msgType)
 				} else {
-					sendMessage(info, conn, t)
+					sendMessage(info, conn, msgType)
 				}
 			} else {
-				err = errors.New("Error trying to get containers")
+				err = errors.New("Error trying to parse json")
 				log.Fatal(err)
-				sendMessage(err, conn, t)
+				sendMessage(err, conn, msgType)
 			}
 
 		case "agent:images":
-			//TODO Gets images of some swarm agent
+			//Gets images of some swarm agent
 			ipI := jsonMsg["ip"]
 			if ip, ok := ipI.(string); ok {
 				s = swarm.GetClientWithIP(ip)
 				info, err := socket.GetImages(s, ip)
 				if err != nil {
-					log.Fatal(err)
-					sendMessage(err, conn, t)
-					log.Fatal("Error trying to get images list")
+					log.Fatal("Error trying to get images list", err)
+					sendMessage(err, conn, msgType)
 				} else {
-					sendMessage(info, conn, t)
+					sendMessage(info, conn, msgType)
 				}
 			} else {
-				err = errors.New("Error trying to get images")
+				err = errors.New("Error trying to parse json")
 				log.Fatal(err)
-				sendMessage(err, conn, t)
+				sendMessage(err, conn, msgType)
 			}
 		default:
-			fmt.Println("Handle message")
-			conn.WriteMessage(t, msg)
+			fmt.Println("Unknown message", msg)
 		}
 
 	}
 }
 
-func sendMessage(data interface{}, conn *websocket.Conn, t int) {
+func sendMessage(data interface{}, conn *websocket.Conn, msgType int) {
 	//Ask cluster state
 	var res []byte
 	json, err := json.Marshal(data)
@@ -121,6 +118,6 @@ func sendMessage(data interface{}, conn *websocket.Conn, t int) {
 	} else {
 		res = json
 	}
-	conn.WriteMessage(t, res)
+	conn.WriteMessage(msgType, res)
 
 }
