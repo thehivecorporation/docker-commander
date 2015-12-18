@@ -1,10 +1,6 @@
 package swarm
 
-import (
-	"log"
-
-	"github.com/sayden/docker-commander/config"
-)
+import "github.com/sayden/docker-commander/config"
 
 //TYPE_ENV must be used in dev and production (no mock)
 const TYPE_ENV = 0
@@ -25,9 +21,9 @@ func GetClient(cType int) Swarm {
 			s := HTTPClient{config.SWARM_MANAGER}
 			return &s
 		case config.PRODUCTION:
-			//TODO Production mode in swarm factory
-			log.Fatal("Production mode not configured yet for swarm factory")
-			return nil
+			// Production mode in swarm factory
+			s := HTTPClient{"http://ip_not_set"}
+			return &s
 		default:
 			s := HTTPClient{config.SWARM_MANAGER}
 			return &s
@@ -39,4 +35,10 @@ func GetClient(cType int) Swarm {
 	default:
 		return &HTTPClientMockError{"http://a_host"}
 	}
+}
+
+// GetClientWithIP returns a configured client with the specified ip
+func GetClientWithIP(ip string) Swarm {
+	s := HTTPClient{Host: ip}
+	return &s
 }
