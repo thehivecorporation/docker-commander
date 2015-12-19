@@ -3,9 +3,7 @@ package swarm
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"strings"
 
@@ -89,13 +87,11 @@ func (c *HTTPClient) makeHTTPGetRequest(trailURL string) ([]byte, error) {
 	defer r.Body.Close()
 
 	if err != nil {
-		fmt.Println(err)
 		return nil, err
 	}
 
 	byt, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		fmt.Println(err)
 		return nil, err
 	}
 

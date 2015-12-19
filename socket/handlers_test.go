@@ -1,13 +1,15 @@
 package socket
 
 import (
-	"log"
 	"testing"
 
 	"github.com/sayden/docker-commander/discovery"
 	"github.com/sayden/docker-commander/entities"
+	"github.com/sayden/docker-commander/logger"
 	"github.com/sayden/docker-commander/swarm"
 )
+
+var log = logger.WithField("socket-handlers")
 
 func TestGetClusterInfo(t *testing.T) {
 	s := swarm.HTTPClientMock{"http://a_host"}
@@ -25,6 +27,8 @@ func TestGetClusterInfo(t *testing.T) {
 	if err == nil {
 		t.Fatal("There is no error after passing an incorrect json")
 	}
+
+	log.Debug(err)
 }
 
 func TestGetAgentsList(t *testing.T) {
@@ -75,12 +79,12 @@ func TestAddContainersForEachAgent(t *testing.T) {
 	}
 
 	if len(agents) == 0 {
-		log.Println(agents)
+		log.Debug(agents)
 		t.Fatal("No hosts has been created")
 	}
 
 	if len(agents[0].Containers) == 0 {
-		log.Println(agents[0])
+		log.Debug(agents[0])
 		t.Fatal("No Container has been added to host 0")
 	}
 }
@@ -125,12 +129,12 @@ func TestAddImagesForEachAgent(t *testing.T) {
 	}
 
 	if len(agents) == 0 {
-		log.Println(agents)
+		log.Debug(agents)
 		t.Fatal("No hosts has been created")
 	}
 
 	if len(agents[0].Images) == 0 {
-		log.Println(agents[0])
+		log.Debug(agents[0])
 		t.Fatal("No Images has been added to host '0'")
 	}
 }
