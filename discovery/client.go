@@ -1,5 +1,9 @@
 package discovery
 
+import (
+	"github.com/sayden/docker-commander/logger"
+)
+
 // Node for representing connected clients to discovery service
 type Node struct {
 	IP         string
@@ -12,3 +16,5 @@ type InfoService interface {
 	ListHosts() ([]Node, error)
 	WatchHosts()
 }
+
+var log = logger.WithField("discovery")
