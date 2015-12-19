@@ -3,8 +3,8 @@ package logger
 import (
 	"os"
 
-	"github.com/Sirupsen/logrus"
-	"github.com/x-cray/logrus-prefixed-formatter"
+	"github.com/sayden/docker-commander/Godeps/_workspace/src/github.com/Sirupsen/logrus"
+	"github.com/sayden/docker-commander/Godeps/_workspace/src/github.com/x-cray/logrus-prefixed-formatter"
 )
 
 //Log is a pre-configured logrus logger
