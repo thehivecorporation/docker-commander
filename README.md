@@ -2,12 +2,14 @@ docker-commander
 =====
 [![Build Status](https://travis-ci.org/sayden/docker-commander.svg?branch=master)](https://travis-ci.org/sayden/docker-commander)
 
-A GUI to manage Docker Swarm.
+A GUI to supervise Docker Swarm.
+
+![desktop_full_screen](screenshots/desktop_full_screen.png)
+![mobile](screenshots/mobile.png)
 
 ## Some info
 * Project structure is defined like [here](https://github.com/golang/go/wiki/GithubCodeLayout):
 * We're using [gin-gonic](https://github.com/gin-gonic/gin)
-* We'll use [Docker Swarm](https://github.com/docker/swarm) probably and / or Ansible.
 
 ## Running Tests
 
@@ -30,6 +32,18 @@ npm run test-integration
 # Without npm
 go test ./tests/integration/...
 ```
+
+## Running the app
+Docker Commander uses Go in backend and React in front. React is managed by NPM so you need it installed and npm scripts to run Browserify:
+
+```bash
+git clone https://github.com/sayden/docker-commander.git
+cd docker-commander
+npm install   #will trigger npm run browserify
+go run main.go
+```
+
+Open localhost:8000 to show the mocked server. You can then tweak `config/config.go` to fit your needs.
 
 # Architecture
 
@@ -66,5 +80,6 @@ An API via socket layer to communicate real-time with front. Because it's bi-dir
   * `new-agent`: When a new Swarm Agent has joined the cluster
   * `kill-agent`: When an already existing Swarm Agent has left the cluster
 
+
 ## Front (React+Redux)
-TODO
+Front is done using React + Redux + Material-Ui. The following actions are defined in [Redux store actions file](public/js/actions.jsx)

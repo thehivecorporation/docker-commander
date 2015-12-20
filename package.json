@@ -1,7 +1,7 @@
 {
   "name": "docker-commander",
-  "version": "0.3.0",
-  "description": "A GUI to manage Docker hosts and containers",
+  "version": "0.3.1",
+  "description": "A GUI to supervise Docker hosts and containers",
   "main": "main.go",
   "scripts": {
     "start": "go run main.go",
@@ -9,7 +9,9 @@
     "test": "go test -cover `go list ./... | grep -v tests` | sed ''/ok/s//$(printf \"\\033[32mok\\033[0m\")/'' | sed ''/FAIL/s//$(printf \"\\033[31mFAIL\\033[0m\")/''",
     "build": "go build -o bin/docker-commander",
     "test-all": "go test -cover ./... | sed ''/ok/s//$(printf \"\\033[32mok\\033[0m\")/'' | sed ''/FAIL/s//$(printf \"\\033[31mFAIL\\033[0m\")/''",
-    "browserify": "watchify -t [ babelify --presets [ es2015 react ] ] public/js/main.jsx -o public/js/bundle.js"
+    "watch": "watchify -t [ babelify --presets [ es2015 react ] ] public/js/main.jsx -o public/js/bundle.js",
+    "browserify": "browserify -t [ babelify --presets [ es2015 react ] ] public/js/main.jsx -o public/js/bundle.js",
+    "postinstall":"npm run browserify"
   },
   "dependencies": {
     "director": "^1.2.8",
