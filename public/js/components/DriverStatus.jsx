@@ -10,6 +10,7 @@ const TableHeaderColumn = require('material-ui/lib/table/table-header-column');
 const TableBody = require('material-ui/lib/table/table-body');
 const FontIcon = require('material-ui/lib/font-icon');
 import injectTapEventPlugin from 'react-tap-event-plugin';
+import Colors from 'material-ui/lib/styles/colors';
 injectTapEventPlugin();
 
 class DriverStatus extends React.Component {
@@ -31,9 +32,15 @@ class DriverStatus extends React.Component {
         <CardHeader
           title="Driver Status"
           subtitle="Click to expand/contract"
-          avatar={<Avatar icon={
-            <FontIcon className="material-icons">memory</FontIcon>
-          } />}
+          avatar={
+            <Avatar
+              icon={
+                <FontIcon className="material-icons">memory</FontIcon>
+              }
+              color={Colors.blue700}
+              backgroundColor={Colors.blue100}
+            />
+          }
           actAsExpander={true}
           showExpandableButton={true}
         />
