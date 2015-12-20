@@ -12,6 +12,7 @@ const TableBody = require('material-ui/lib/table/table-body');
 const FontIcon = require('material-ui/lib/font-icon');
 import ContainerList from './ContainerList.jsx';
 import injectTapEventPlugin from 'react-tap-event-plugin';
+const Badge = require('material-ui/lib/badge');
 injectTapEventPlugin();
 
 class Agent extends React.Component {
@@ -31,15 +32,31 @@ class Agent extends React.Component {
     let agentInfo = "Containers: " + this.props.agent.Containers.length
       + ", Images: " + this.props.agent.Images.length
       + ", Exposed Ports: " + exposedPorts;
+
+    let avatar;
+    if (this.props.agent.Containers != 0) {
+      avatar = (<Badge badgeContent={this.props.agent.Containers.length}
+        secondary={true}
+        badgeStyle={{top:-5, right:12}}
+        style={{padding: '0px 30px 0px 0px'}}
+      >
+      <Avatar src="img/docker_official.png"/>
+    </Badge>);
+    } else {
+      avatar = (<Avatar src="img/docker_official.png"/>);
+    }
+
+
     return (
       <Card style={this.props.style}>
         <CardHeader
           title={"Agent " + this.props.agent.IP}
-          subtitle={agentInfo}
           actAsExpander={true}
           showExpandableButton={true}
-          avatar={<Avatar src="img/docker.png"></Avatar>}
-        />
+          subtitle={agentInfo}
+          avatar={avatar}
+        >
+    </CardHeader>
         <ContainerList expandable={true} containers={this.props.agent.Containers} />
       </Card>
   );

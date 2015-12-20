@@ -3,10 +3,12 @@ import { connect } from 'react-redux';
 import Cluster from './components/Cluster.jsx'
 import AgentsList from './components/AgentsList.jsx'
 const Paper = require('material-ui/lib/paper');
+const AppBar = require('material-ui/lib/app-bar');
+const Avatar = require('material-ui/lib/avatar');
 
 class App extends React.Component {
   render() {
-    let style = {margin: "10px"}
+    let style = {margin: "10px 5px 10px 5px"}
 
     if(!this.props.Cluster){
       return (
@@ -18,8 +20,12 @@ class App extends React.Component {
     } else {
       return (
         <div>
-            <Cluster style={style} cluster={this.props.Cluster} />
-            <AgentsList style={style} agents={this.props.Agents} />
+          <AppBar
+            title="Docker Commander"
+            iconElementLeft={<Avatar src="img/swarm.png"></Avatar>}
+          />
+          <Cluster style={style} cluster={this.props.Cluster} />
+          <AgentsList style={style} agents={this.props.Agents} />
         </div>
       );
     }

@@ -9,7 +9,6 @@ const Table = require('material-ui/lib/table/table');
 const TableHeader = require('material-ui/lib/table/table-header');
 const TableHeaderColumn = require('material-ui/lib/table/table-header-column');
 const TableBody = require('material-ui/lib/table/table-body');
-const FontIcon = require('material-ui/lib/font-icon');
 import Colors from 'material-ui/lib/styles/colors';
 import ContainerPortList from './ContainerPortList.jsx';
 import injectTapEventPlugin from 'react-tap-event-plugin';
