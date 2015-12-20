@@ -35,7 +35,7 @@ class Container extends React.Component {
             );
 
             portInfo = container.Ports.map(p => {
-              return p.IP + ":" + p.PublicPort + "->" + p.PrivatePort + "/" + p.Type + "     ";
+              return p.IP + ":" + p.PublicPort + "->" + p.PrivatePort + "/" + p.Type + " ";
             }).toString();
 
 
@@ -55,7 +55,7 @@ class Container extends React.Component {
     return(
         <Card style={this.props.style} initiallyExpanded={false}>
           <CardHeader
-            title={this.props.container.Command}
+            title={this.props.container.Names}
             subtitle={portInfo}
             actAsExpander={true}
             showExpandableButton={true}

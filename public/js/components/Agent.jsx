@@ -30,10 +30,6 @@ class Agent extends React.Component {
     //Delete trailing comma in result
     exposedPorts = exposedPorts.substring(0, exposedPorts.length - 1)
 
-    let agentInfo = "Containers: " + this.props.agent.Containers.length
-      + ", Images: " + this.props.agent.Images.length
-      + ", Exposed Ports: " + exposedPorts;
-
     let avatar;
     if (this.props.agent.Containers != 0) {
       avatar = (<Badge badgeContent={this.props.agent.Containers.length}
@@ -54,7 +50,7 @@ class Agent extends React.Component {
           title={"Agent " + this.props.agent.IP}
           actAsExpander={true}
           showExpandableButton={true}
-          subtitle={agentInfo}
+          subtitle={"Ports: " + exposedPorts}
           avatar={avatar}
         >
     </CardHeader>

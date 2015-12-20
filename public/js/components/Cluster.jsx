@@ -70,7 +70,7 @@ class Cluster extends React.Component {
       <Card style={this.props.style} initiallyExpanded={false}>
         <CardHeader
           title="Swarm"
-          subtitle="Information about Swarm cluster"
+          subtitle="Tap to get details..."
           actAsExpander={true}
           showExpandableButton={true}
           avatar={<Avatar src="img/swarm.png"></Avatar>}
@@ -117,7 +117,7 @@ class Cluster extends React.Component {
         </Card>
 
         {driverStatus}
-        
+
       </Card>
     )
   }

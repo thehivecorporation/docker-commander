@@ -30,6 +30,15 @@ class Image extends React.Component {
     let time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
     return time;
   }
+
+  getImageRepoTag(){
+    if(this.props.image.RepoTags.length > 0){
+      let tag = this.props.image.RepoTags[0];
+      tag = tag.substring(0, tag.indexOf(':'));
+      return tag
+    }
+  }
+
   render(){
     let image = this.props.image;
     let rows = [];
@@ -38,25 +47,59 @@ class Image extends React.Component {
       if (image.hasOwnProperty(key)) {
         //Non empty info
         if (image[key] != '' && image[key] != null) {
-          rows.push(
-            <TableRow key={image.Id + key + "_row"}>
-              <TableRowColumn>{key}</TableRowColumn>
-              <TableRowColumn>
-                {image[key]}
-              </TableRowColumn>
-            </TableRow>
-          );
+          if(key == 'Created'){
+            rows.push(
+              <TableRow key={image.Id + key + "_row"}>
+                <TableRowColumn>Created</TableRowColumn>
+                <TableRowColumn>
+                  {this.getCreationTime()}
+                </TableRowColumn>
+              </TableRow>
+            );
+          } else if (key == 'VirtualSize'){
+            rows.push(
+              <TableRow key={image.Id + key + "_row"}>
+                <TableRowColumn>VirtualSize</TableRowColumn>
+                <TableRowColumn>
+                  {this.getVirtualSize()}
+                </TableRowColumn>
+              </TableRow>
+            );
+          } else if (key == 'Labels'){
+            for (var key in image['Labels']) {
+              if (image['Labels'].hasOwnProperty(key)) {
+                rows.push(
+                  <TableRow key={image.Id + key + "_row"}>
+                    <TableRowColumn>{key}</TableRowColumn>
+                    <TableRowColumn>
+                      {image['Labels'][key]}
+                    </TableRowColumn>
+                  </TableRow>
+                );
+              }
+            }
+          } else {
+            rows.push(
+              <TableRow key={image.Id + key + "_row"}>
+                <TableRowColumn>{key}</TableRowColumn>
+                <TableRowColumn>
+                  {image[key]}
+                </TableRowColumn>
+              </TableRow>
+            );
+          }
         }
       }
     }
     return(
         <Card style={this.props.style} initiallyExpanded={false}>
           <CardHeader
-            title={"Image: " + this.props.image.RepoTags}
-            subtitle={"Virtual Size: " + this.getVirtualSize() + ", Created: " + this.getCreationTime()}
+            title={this.getImageRepoTag()}
+            subtitle={this.getVirtualSize()}
             actAsExpander={true}
             showExpandableButton={true}
             avatar={<Avatar src="img/docker.png"></Avatar>}
+            style={{fontSize:"50px", margin:"0 0 20px 0"}}
             />
 
             <Table
