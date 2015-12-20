@@ -17,7 +17,6 @@ class DriverStatus extends React.Component {
   render(){
     let rows = this.props.driverStatus.map(d => {
       d[0] = d[0].replace("â”” ", "")   //TODO Research about this problem
-      console.log(d[0])
       return(
         <TableRow key={d[0] + d[1]}>
           <TableRowColumn>{d[0]}</TableRowColumn>

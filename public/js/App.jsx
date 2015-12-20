@@ -11,10 +11,6 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
 
 class App extends React.Component {
-  onClickGithub(e) {
-      console.log("Asdasd",e);
-  }
-
   render() {
     let style = {margin: "10px 5px 10px 5px"}
 
