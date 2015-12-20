@@ -2,7 +2,6 @@ package discovery
 
 import (
 	"errors"
-	"log"
 )
 
 // ConsulClient uses consul as discovery service
