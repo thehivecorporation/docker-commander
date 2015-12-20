@@ -16,12 +16,12 @@ injectTapEventPlugin();
 class DriverStatus extends React.Component {
   render(){
     let rows = this.props.driverStatus.map(d => {
+      d[0] = d[0].replace("â”” ", "")   //TODO Research about this problem
+      console.log(d[0])
       return(
-        <TableRow key={d[0]}>
+        <TableRow key={d[0] + d[1]}>
           <TableRowColumn>{d[0]}</TableRowColumn>
-          <TableRowColumn>
-            {d[1]}
-          </TableRowColumn>
+          <TableRowColumn>{d[1]}</TableRowColumn>
         </TableRow>
       );
     })
@@ -45,24 +45,22 @@ class DriverStatus extends React.Component {
           showExpandableButton={true}
         />
 
+
         <Table
           height='400px'
-          fixedHeader={false}
-          fixedFooter={false}
-          selectable={false}
-          multiSelectable={false}
+          fixedHeader={true}
+          fixedFooter={true}
           expandable={true}
-          >
-          <TableHeader enableSelectAll={false} displaySelectAll={false} >
+          selectable={false}>
+          <TableHeader enableSelectAll={false} displaySelectAll={false}>
             <TableRow>
               <TableHeaderColumn tooltip='The Driver'>Driver</TableHeaderColumn>
-              <TableHeaderColumn tooltip='The Status'>Status</TableHeaderColumn>
+              <TableHeaderColumn tooltip='The Info'>Info</TableHeaderColumn>
             </TableRow>
           </TableHeader>
           <TableBody
-            deselectOnClickaway={false}
-            showRowHover={true}
             displayRowCheckbox={false}
+            showRowHover={true}
             >
 
             {rows}
