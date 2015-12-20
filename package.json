@@ -12,10 +12,18 @@
     "browserify": "watchify -t [ babelify --presets [ es2015 react ] ] public/js/main.jsx -o public/js/bundle.js"
   },
   "dependencies": {
+    "director": "^1.2.8",
+    "install": "^0.4.1",
+    "material-ui": "^0.13.4",
+    "npm": "^3.5.2",
     "react": "^0.14.3",
     "react-dom": "^0.14.3",
     "react-redux": "^4.0.1",
-    "redux": "^3.0.5"
+    "react-tap-event-plugin": "^0.2.1",
+    "redux": "^3.0.5",
+    "resourceful": "^0.3.5",
+    "restful": "^0.4.5",
+    "restler": "^3.4.0"
   },
   "devDependencies": {
     "babel-preset-es2015": "^6.3.13",
