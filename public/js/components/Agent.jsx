@@ -11,6 +11,7 @@ const TableHeaderColumn = require('material-ui/lib/table/table-header-column');
 const TableBody = require('material-ui/lib/table/table-body');
 const FontIcon = require('material-ui/lib/font-icon');
 import ContainerList from './ContainerList.jsx';
+import ImageList from './ImageList.jsx';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 const Badge = require('material-ui/lib/badge');
 injectTapEventPlugin();
@@ -58,6 +59,7 @@ class Agent extends React.Component {
         >
     </CardHeader>
         <ContainerList expandable={true} containers={this.props.agent.Containers} />
+        <ImageList expandable={true} images={this.props.agent.Images} />
       </Card>
   );
   }
