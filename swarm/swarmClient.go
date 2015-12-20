@@ -1,6 +1,9 @@
 package swarm
 
-import "github.com/sayden/docker-commander/Godeps/_workspace/src/github.com/samalba/dockerclient"
+import (
+	"github.com/sayden/docker-commander/Godeps/_workspace/src/github.com/samalba/dockerclient"
+	"github.com/sayden/docker-commander/logger"
+)
 
 // Swarm is to uncouple http.Client library
 type Swarm interface {
@@ -8,3 +11,5 @@ type Swarm interface {
 	ListContainers() ([]dockerclient.Container, error)
 	ListImages() ([]dockerclient.Image, error)
 }
+
+var log = logger.WithField("swarm")

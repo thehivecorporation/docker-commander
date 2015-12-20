@@ -1,51 +1,16 @@
 <html>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <head>
-    <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
   </head>
 
   <body>
-    <h3>WebSocket Go</h3>
-    <pre id="output"></pre>
+    <div id="container"></div>
 
-    <script>
-      url = 'ws://localhost:8000/ws';
-      c = new WebSocket(url);
+    <script src="js/bundle.js"></script>
+    <script type="text/javascript">
 
-      send = function(data){
-        $("#output").append((new Date())+ " ==> "+data+"\n")
-        c.send(data)
-      }
-
-      c.onmessage = function(msg){
-        $("#output").append((new Date())+ " <== "+msg.data+"\n")
-        console.log(msg)
-      }
-
-      c.onopen = function(){
-        var json = {
-          action: "cluster"
-        };
-        setInterval(
-          function(){ send(JSON.stringify(json)) }
-        , 1000 )
-
-        var json2 = {
-          action: "agent:containers",
-          ip:"http://put_ip_here"
-        };
-        setInterval(
-          function(){ send(JSON.stringify(json2)) }
-        , 1000 )
-
-        var json3 = {
-          action: "agent:images",
-          ip:"http://put_ip_here"
-        };
-        setInterval(
-          function(){ send(JSON.stringify(json3)) }
-        , 1000 )
-      }
     </script>
-
   </body>
 </html>

@@ -1,7 +1,7 @@
 package socket
 
 import (
-	"log"
+	"errors"
 
 	"github.com/sayden/docker-commander/Godeps/_workspace/src/github.com/samalba/dockerclient"
 	"github.com/sayden/docker-commander/discovery"
@@ -13,7 +13,6 @@ func getClusterInfo(s swarm.Swarm) (*dockerclient.Info, error) {
 	// Cluster info
 	i, err := s.ListInfo()
 	if err != nil {
-		log.Println(err)
 		return nil, err
 	}
 
@@ -24,7 +23,6 @@ func getAgentsList(i discovery.InfoService) ([]entities.Agent, error) {
 	//Get every host
 	hs, err := i.ListHosts()
 	if err != nil {
-		log.Println(err)
 		return nil, err
 	}
 
@@ -43,7 +41,8 @@ func getAgentsList(i discovery.InfoService) ([]entities.Agent, error) {
 
 func addContainersForEachAgent(s swarm.Swarm, ag *[]entities.Agent) error {
 	if len(*ag) == 0 {
-		log.Println("ERROR: There are no agents in ag parameter")
+		err := errors.New("ERROR: There are no agents in ag parameter")
+		return err
 	}
 
 	agents := *ag
@@ -72,6 +71,7 @@ func GetContainers(s swarm.Swarm, ip string) (*[]dockerclient.Container, error) 
 	return &cs, nil
 }
 
+//GetImages returns images associated with a host ip or error
 func GetImages(s swarm.Swarm, ip string) (*[]dockerclient.Image, error) {
 	is, err := s.ListImages()
 	if err != nil {
@@ -83,7 +83,8 @@ func GetImages(s swarm.Swarm, ip string) (*[]dockerclient.Image, error) {
 
 func addImagesForEachAgent(s swarm.Swarm, ag *[]entities.Agent) error {
 	if len(*ag) == 0 {
-		log.Println("ERROR: There are no agents in ag parameter")
+		err := errors.New("ERROR: There are no agents in ag parameter")
+		return err
 	}
 
 	agents := *ag
@@ -106,12 +107,10 @@ func addImagesForEachAgent(s swarm.Swarm, ag *[]entities.Agent) error {
 func GetFullInfo(s swarm.Swarm, i discovery.InfoService) (entities.Overall, error) {
 	cluster, err := getClusterInfo(s)
 	if err != nil {
-		log.Println(err)
 		return entities.Overall{}, err
 	}
 	agentsNodes, err := getAgentsList(i)
 	if err != nil {
-		log.Println(err)
 		return entities.Overall{}, err
 	}
 

@@ -6,6 +6,11 @@
 	],
 	"Deps": [
 		{
+			"ImportPath": "github.com/Sirupsen/logrus",
+			"Comment": "v0.8.7-53-g446d1c1",
+			"Rev": "446d1c146faa8ed3f4218f056fcd165f6bcfda81"
+		},
+		{
 			"ImportPath": "github.com/coreos/etcd/pkg/pathutil",
 			"Comment": "v2.3.0-alpha.0-170-g68a3962",
 			"Rev": "68a3962f6459c7a2f813ce9cbdb64447821381aa"
@@ -42,6 +47,10 @@
 			"Rev": "56b76bdf51f7708750eac80fa38b952bb9f32639"
 		},
 		{
+			"ImportPath": "github.com/mgutz/ansi",
+			"Rev": "c286dcecd19ff979eeb73ea444e479b903f2cfcb"
+		},
+		{
 			"ImportPath": "github.com/samalba/dockerclient",
 			"Rev": "4656b1bc6cbc06b75d65983475e4809cbd53ebb5"
 		},
@@ -53,6 +62,10 @@
 		{
 			"ImportPath": "github.com/ugorji/go/codec",
 			"Rev": "cd43bdd6be4b5675a0d1e75c4af55ee1dc0d9c5e"
+		},
+		{
+			"ImportPath": "github.com/x-cray/logrus-prefixed-formatter",
+			"Rev": "19bfe61502ba35a3235b4970c10b9366a0aa9b61"
 		},
 		{
 			"ImportPath": "golang.org/x/net/context",

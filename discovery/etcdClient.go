@@ -2,7 +2,6 @@ package discovery
 
 import (
 	"fmt"
-	"log"
 	"time"
 
 	"github.com/sayden/docker-commander/Godeps/_workspace/src/github.com/sayden/etcd/client"

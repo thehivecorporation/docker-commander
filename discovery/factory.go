@@ -1,8 +1,6 @@
 package discovery
 
 import (
-	"log"
-
 	"github.com/sayden/docker-commander/config"
 )
 
@@ -14,10 +12,10 @@ func GetClient() InfoService {
 			s := EtcdClient{Host: config.ETCD_HOST_DEVELOPMENT}
 			return &s
 		case config.CONSUL:
-			log.Fatal("Not yet implemented")
+			log.Fatal("Consul not yet implemented")
 			return nil
 		case config.ZOOKEEPER:
-			log.Fatal("Not yet implemented")
+			log.Fatal("Zookeeper not yet implemented")
 			return nil
 		default:
 			s := EtcdClient{Host: config.ETCD_HOST_DEVELOPMENT}
