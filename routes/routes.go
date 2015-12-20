@@ -8,6 +8,7 @@ import (
 	"github.com/sayden/docker-commander/Godeps/_workspace/src/github.com/gin-gonic/gin"
 	"github.com/sayden/docker-commander/Godeps/_workspace/src/github.com/gorilla/websocket"
 	"github.com/sayden/docker-commander/discovery"
+	"github.com/sayden/docker-commander/entities"
 	"github.com/sayden/docker-commander/logger"
 	"github.com/sayden/docker-commander/socket"
 	"github.com/sayden/docker-commander/swarm"
@@ -20,6 +21,9 @@ func Init(ginApp *gin.Engine, s swarm.Swarm, i discovery.InfoService) {
 	//Common routes
 	ginApp.LoadHTMLFiles("public/index.html")
 	ginApp.GET("/", index)
+
+	ginApp.Static("/js", "./public/js")
+	ginApp.Static("/img", "./public/img")
 
 	ginApp.GET("/ws", func(c *gin.Context) {
 		initWebSocket(c, s, i)
@@ -59,7 +63,7 @@ func messageHandler(conn *websocket.Conn, s swarm.Swarm, i discovery.InfoService
 			log.Fatal(err)
 		}
 
-		a := jsonMsg["action"]
+		a := jsonMsg["action"].(string)
 
 		switch a {
 		case "cluster":
@@ -69,10 +73,14 @@ func messageHandler(conn *websocket.Conn, s swarm.Swarm, i discovery.InfoService
 				log.Error("Error trying to get cluster info", err)
 				sendMessage(err, conn, msgType)
 			} else {
-				sendMessage(info, conn, msgType)
+				sr := entities.SocketResponse{
+					Response: info,
+					Action:   a,
+				}
+				sendMessage(sr, conn, msgType)
 			}
 		case "agent:containers":
-			//TODO Gets containers of some swarm agent
+			//Gets containers of some swarm agent
 			ipI := jsonMsg["ip"]
 			if ip, ok := ipI.(string); ok {
 				s = swarm.GetClientWithIP(ip)
@@ -113,8 +121,7 @@ func messageHandler(conn *websocket.Conn, s swarm.Swarm, i discovery.InfoService
 	}
 }
 
-func sendMessage(data interface{}, conn *websocket.Conn, msgType int) {
-	//Ask cluster state
+func sendMessage(data interface{}, conn *websocket.Conn, msgType int) []byte {
 	var res []byte
 	json, err := json.Marshal(data)
 	if err != nil {
@@ -125,4 +132,5 @@ func sendMessage(data interface{}, conn *websocket.Conn, msgType int) {
 	}
 	conn.WriteMessage(msgType, res)
 
+	return res
 }
