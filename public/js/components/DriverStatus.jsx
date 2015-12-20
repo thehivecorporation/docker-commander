@@ -1,5 +1,4 @@
 import React from 'react';
-
 const Card = require('material-ui/lib/card/card');
 const Avatar = require('material-ui/lib/avatar');
 const CardHeader = require('material-ui/lib/card/card-header');
@@ -13,20 +12,34 @@ const FontIcon = require('material-ui/lib/font-icon');
 import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
 
-class Agent extends React.Component {
+class DriverStatus extends React.Component {
   render(){
-    return (
+    let rows = this.props.driverStatus.map(d => {
+      return(
+        <TableRow key={d[0]}>
+          <TableRowColumn>{d[0]}</TableRowColumn>
+          <TableRowColumn>
+            {d[1]}
+          </TableRowColumn>
+        </TableRow>
+      );
+    })
+
+
+    return(
       <Card style={this.props.style} initiallyExpanded={false}>
         <CardHeader
-          title={"Agent " + this.props.agent.IP}
-          subtitle="Information about containers and images"
-          avatar={<Avatar src="img/docker.png"></Avatar>}
+          title="Driver Status"
+          subtitle="Click to expand/contract"
+          avatar={<Avatar icon={
+            <FontIcon className="material-icons">memory</FontIcon>
+          } />}
           actAsExpander={true}
           showExpandableButton={true}
         />
 
         <Table
-          height='200px'
+          height='400px'
           fixedHeader={false}
           fixedFooter={false}
           selectable={false}
@@ -45,11 +58,13 @@ class Agent extends React.Component {
             displayRowCheckbox={false}
             >
 
+            {rows}
+
           </TableBody>
         </Table>
       </Card>
-  );
+    );
   }
 }
 
-export default Agent
+export default DriverStatus

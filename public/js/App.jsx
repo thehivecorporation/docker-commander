@@ -2,19 +2,26 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Cluster from './components/Cluster.jsx'
 import AgentsList from './components/AgentsList.jsx'
+import DriverStatus from './components/DriverStatus.jsx';
+const Paper = require('material-ui/lib/paper');
 
 class App extends React.Component {
   render() {
-    console.log("Props:", this.props);
+    let style = {margin: "10px"}
 
     if(!this.props.Cluster){
-      return <div>Loading data from server...</div>;
+      return (
+        <Paper zDepth={2} style={style}>
+          <p>Loading data from server...</p>
+        </Paper>
+      );
 
     } else {
       return (
         <div>
-          <Cluster cluster={this.props.Cluster} />
-          <AgentsList agents={this.props.Agents} />
+            <Cluster style={style} cluster={this.props.Cluster} />
+            <DriverStatus style={style} driverStatus={this.props.Cluster.DriverStatus} />
+            <AgentsList style={style} agents={this.props.Agents} />
         </div>
       );
     }
