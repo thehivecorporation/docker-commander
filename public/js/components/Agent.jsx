@@ -16,11 +16,26 @@ injectTapEventPlugin();
 
 class Agent extends React.Component {
   render(){
+    let exposedPorts = this.props.agent.Containers.map(c => {
+      return c.Ports.filter(p => {
+        return (p.PublicPort != "" || p.PublicPort != 0);
+      })
+      .map(p => {
+        return p.PublicPort;
+      });
+    }).toString();
+
+    //Delete trailing comma in result
+    exposedPorts = exposedPorts.substring(0, exposedPorts.length - 1)
+
+    let agentInfo = "Containers: " + this.props.agent.Containers.length
+      + ", Images: " + this.props.agent.Images.length
+      + ", Exposed Ports: " + exposedPorts;
     return (
       <Card style={this.props.style}>
         <CardHeader
           title={"Agent " + this.props.agent.IP}
-          subtitle="Information about containers and images"
+          subtitle={agentInfo}
           actAsExpander={true}
           showExpandableButton={true}
           avatar={<Avatar src="img/docker.png"></Avatar>}
