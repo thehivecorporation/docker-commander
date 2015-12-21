@@ -12,15 +12,16 @@ import (
 var log = logger.WithField("socker:handler")
 
 type ReceiverPayload struct {
-	s *swarm.Swarm
-	i *discovery.InfoService
-	msgr communications.FrontMessenger
+	S    *swarm.Swarm
+	I    *discovery.InfoService
+	Msgr communications.FrontMessenger
+	Action string
 }
 
 //Cluster respond to socket message "cluster" to return the entire cluster
 //information
-func Cluster(s *swarm.Swarm, i *discovery.InfoService, msgr communications.FrontMessenger) {
-	info, err := socket.GetFullInfo(*s, *i)
+func Cluster(rp *ReceiverPayload) {
+	info, err := socket.GetFullInfo(*rp.S, *rp.I)
 	if err != nil {
 		log.Error("Error trying to get cluster info", err)
 	} else {
@@ -28,6 +29,6 @@ func Cluster(s *swarm.Swarm, i *discovery.InfoService, msgr communications.Front
 			Response: &info,
 			Action:   config.CONNECTION_ACTION_CLUSTER,
 		}
-		msgr.FrontMessage(&sr)
+		rp.Msgr.FrontMessage(&sr)
 	}
 }

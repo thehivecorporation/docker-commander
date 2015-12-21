@@ -26,8 +26,10 @@ func Init(ginApp *gin.Engine, s swarm.Swarm, i discovery.InfoService) {
 	ginApp.Static("/img", "./public/img")
 
 	ginApp.GET("/ws", func(c *gin.Context) {
-		initWebSocket(c, s, i)
+		commCh := make(chan *receivers.ReceiverPayload, 10)
+		initWebSocket(c, s, i, commCh)
 	})
+
 }
 
 func index(c *gin.Context) {
@@ -39,7 +41,7 @@ var wsupgrader = websocket.Upgrader{
 	WriteBufferSize: 1024,
 }
 
-func initWebSocket(c *gin.Context, s swarm.Swarm, i discovery.InfoService) {
+func initWebSocket(c *gin.Context, s swarm.Swarm, i discovery.InfoService, commCh chan *receivers.ReceiverPayload) {
 	conn, err := wsupgrader.Upgrade(c.Writer, c.Request, nil)
 	if err != nil {
 		log.Errorf("Failed to set websocket upgrade: %+v", err)
@@ -47,10 +49,11 @@ func initWebSocket(c *gin.Context, s swarm.Swarm, i discovery.InfoService) {
 	}
 	log.Info("Websocket started successfully")
 
-	go messageHandler(conn, s, i)
+	go messageHandler(conn, s, i, commCh)
+	go channelHandler(commCh)
 }
 
-func messageHandler(conn *websocket.Conn, s swarm.Swarm, i discovery.InfoService) {
+func messageHandler(conn *websocket.Conn, s swarm.Swarm, i discovery.InfoService, commCh chan *receivers.ReceiverPayload) {
 	for {
 		_, msg, err := conn.ReadMessage()
 		if err != nil {
@@ -66,13 +69,22 @@ func messageHandler(conn *websocket.Conn, s swarm.Swarm, i discovery.InfoService
 		msgr := &communications.WebsocketCommunicator{conn}
 
 		a := jsonMsg["action"].(string)
-		switch a {
+		rp := receivers.ReceiverPayload{&s, &i, msgr, a}
+		commCh <- &rp
+	}
+}
+
+func channelHandler(r chan *receivers.ReceiverPayload) {
+	for {
+		rp := <-r
+
+		switch rp.Action {
 		case config.CONNECTION_ACTION_CLUSTER:
 			//Ask entire cluster state
-			go receivers.Cluster(&s, &i, msgr)
+			go receivers.Cluster(rp)
 		default:
-			fmt.Println("Unknown message, returning cluster state", msg)
-			receivers.Cluster(&s, &i, msgr)
+			fmt.Println("Unknown message, returning cluster state")
+			receivers.Cluster(rp)
 		}
 	}
 }
