@@ -32,3 +32,11 @@ const DEVELOPMENT = 1
 const PRODUCTION = 2
 
 const CURRENT_ENV = MOCK
+
+// Front -> Back -> Front communication strategy
+const WEBSOCKET = 0
+const AJAX = 1
+const COMMUNICATIONS_STRATEGY = WEBSOCKET
+
+// Front -> Back actions
+const CONNECTION_ACTION_CLUSTER = "cluster"
