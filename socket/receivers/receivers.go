@@ -12,10 +12,11 @@ import (
 var log = logger.WithField("socker:handler")
 
 type ReceiverPayload struct {
-	S    *swarm.Swarm
-	I    *discovery.InfoService
-	Msgr communications.FrontMessenger
+	S      *swarm.Swarm
+	I      *discovery.InfoService
+	Msgr   communications.FrontMessenger
 	Action string
+	Payload string
 }
 
 //Cluster respond to socket message "cluster" to return the entire cluster
@@ -30,5 +31,13 @@ func Cluster(rp *ReceiverPayload) {
 			Action:   config.CONNECTION_ACTION_CLUSTER,
 		}
 		rp.Msgr.FrontMessage(&sr)
+	}
+}
+
+func SwarmIP(rp *ReceiverPayload) {
+	if config.CURRENT_ENV == config.DEVELOPMENT {
+		config.SWARM_MANAGER_DEVELOPMENT = rp.
+	} else {
+
 	}
 }
