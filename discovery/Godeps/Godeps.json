@@ -1,0 +1,73 @@
+{
+	"ImportPath": "github.com/sayden/docker-commander/discovery",
+	"GoVersion": "go1.5",
+	"Packages": [
+		"."
+	],
+	"Deps": [
+		{
+			"ImportPath": "github.com/Sirupsen/logrus",
+			"Comment": "v0.8.7-53-g446d1c1",
+			"Rev": "446d1c146faa8ed3f4218f056fcd165f6bcfda81"
+		},
+		{
+			"ImportPath": "github.com/coreos/etcd/client",
+			"Comment": "v2.3.0-alpha.0-277-g70bcde8",
+			"Rev": "70bcde89bcd6ef3de547f8fab1c1d29ee18f3704"
+		},
+		{
+			"ImportPath": "github.com/coreos/etcd/pkg/pathutil",
+			"Comment": "v2.3.0-alpha.0-277-g70bcde8",
+			"Rev": "70bcde89bcd6ef3de547f8fab1c1d29ee18f3704"
+		},
+		{
+			"ImportPath": "github.com/coreos/etcd/pkg/types",
+			"Comment": "v2.3.0-alpha.0-277-g70bcde8",
+			"Rev": "70bcde89bcd6ef3de547f8fab1c1d29ee18f3704"
+		},
+		{
+			"ImportPath": "github.com/hashicorp/consul/api",
+			"Comment": "v0.6.0-75-g14922b5",
+			"Rev": "14922b58ae21472ea85c7b533db067e6f2370f88"
+		},
+		{
+			"ImportPath": "github.com/hashicorp/go-cleanhttp",
+			"Rev": "ce617e79981a8fff618bb643d155133a8f38db96"
+		},
+		{
+			"ImportPath": "github.com/hashicorp/serf/coordinate",
+			"Comment": "v0.7.0-1-g39c7c06",
+			"Rev": "39c7c06298b480560202bec00c2c77e974e88792"
+		},
+		{
+			"ImportPath": "github.com/mgutz/ansi",
+			"Rev": "c286dcecd19ff979eeb73ea444e479b903f2cfcb"
+		},
+		{
+			"ImportPath": "github.com/sayden/docker-commander/config",
+			"Comment": "0.4.0-1-gc9d6fa7",
+			"Rev": "c9d6fa70fb15b7660a1407161f786d937b0c5a4b"
+		},
+		{
+			"ImportPath": "github.com/sayden/docker-commander/logger",
+			"Comment": "0.4.0-1-gc9d6fa7",
+			"Rev": "c9d6fa70fb15b7660a1407161f786d937b0c5a4b"
+		},
+		{
+			"ImportPath": "github.com/ugorji/go/codec",
+			"Rev": "646ae4a518c1c3be0739df898118d9bccf993858"
+		},
+		{
+			"ImportPath": "github.com/x-cray/logrus-prefixed-formatter",
+			"Rev": "19bfe61502ba35a3235b4970c10b9366a0aa9b61"
+		},
+		{
+			"ImportPath": "golang.org/x/net/context",
+			"Rev": "5d0a0f8cd486626821d2ba44d471ab1c9271d38f"
+		},
+		{
+			"ImportPath": "golang.org/x/sys/unix",
+			"Rev": "833a04a10549a95dc34458c195cbad61bbb6cb4d"
+		}
+	]
+}

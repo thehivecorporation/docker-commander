@@ -1,7 +1,7 @@
 package discovery
 
 import (
-	"github.com/sayden/docker-commander/logger"
+	"github.com/sayden/docker-commander/discovery/Godeps/_workspace/src/github.com/sayden/docker-commander/logger"
 )
 
 // Node for representing connected clients to discovery service

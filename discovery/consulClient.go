@@ -1,7 +1,7 @@
 package discovery
 
 import (
-	"github.com/hashicorp/consul/api"
+	"github.com/sayden/docker-commander/discovery/Godeps/_workspace/src/github.com/hashicorp/consul/api"
 )
 
 // ConsulClient uses consul as discovery service

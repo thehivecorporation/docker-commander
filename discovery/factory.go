@@ -1,7 +1,7 @@
 package discovery
 
 import (
-	"github.com/sayden/docker-commander/config"
+	"github.com/sayden/docker-commander/discovery/Godeps/_workspace/src/github.com/sayden/docker-commander/config"
 )
 
 // GetClient returns a configured client to talk with discovery service
