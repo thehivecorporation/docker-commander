@@ -69,7 +69,7 @@ func messageHandler(conn *websocket.Conn, s swarm.Swarm, i discovery.InfoService
 		msgr := &communications.WebsocketCommunicator{conn}
 
 		a := jsonMsg["action"].(string)
-		rp := receivers.ReceiverPayload{&s, &i, msgr, a}
+		rp := receivers.ReceiverPayload{&s, &i, msgr, a, ""}
 		commCh <- &rp
 	}
 }
