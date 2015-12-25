@@ -1,8 +1,6 @@
 package discovery
 
 import (
-	"fmt"
-	"log"
 	"time"
 
 	"github.com/coreos/etcd/client"
@@ -36,7 +34,7 @@ func (e *EtcdClient) WatchHosts() {
 	// TODO Make a break action to stop recursivity
 	if err == nil {
 		if len(ns) == 0 {
-			fmt.Println("Exiting app")
+			log.Error("Exiting app")
 		} else {
 			log.Printf("%q action triggered on %q to set it to %q\n", r.Action, r.Node.Key, r.Node.Value)
 			log.Println(len(ns))

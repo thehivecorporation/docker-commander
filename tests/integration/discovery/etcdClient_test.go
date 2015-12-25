@@ -3,8 +3,8 @@ package discovery
 import "testing"
 
 import (
-	"github.com/sayden/docker-commander/config"
-	"github.com/sayden/docker-commander/discovery"
+	"github.com/sayden/docker-commander/tests/integration/discovery/Godeps/_workspace/src/github.com/sayden/docker-commander/config"
+	"github.com/sayden/docker-commander/tests/integration/discovery/Godeps/_workspace/src/github.com/sayden/docker-commander/discovery"
 )
 
 func TestEtcdClientIntegration(t *testing.T) {

@@ -3,8 +3,8 @@ package discovery
 import (
 	"testing"
 
-	"github.com/sayden/docker-commander/config"
-	"github.com/sayden/docker-commander/discovery"
+	"github.com/sayden/docker-commander/tests/integration/discovery/Godeps/_workspace/src/github.com/sayden/docker-commander/config"
+	"github.com/sayden/docker-commander/tests/integration/discovery/Godeps/_workspace/src/github.com/sayden/docker-commander/discovery"
 )
 
 func TestConsulClientIntegration(t *testing.T) {
