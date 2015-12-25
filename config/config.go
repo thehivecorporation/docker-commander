@@ -19,8 +19,8 @@ const ETCD_HOST_DEVELOPMENT string = "http://192.168.1.35:2379"
 const ETCD_HOST_PRODUCTION string = "http://127.0.0.1:2379"
 
 // Consul host
-const CONSUL_HOST_DEVELOPMENT string = "http://127.0.0.1:2375"
-const CONSUL_HOST_PRODUCTION string = "http://127.0.0.1:2375"
+const CONSUL_HOST_DEVELOPMENT string = "192.168.1.42:8500"
+const CONSUL_HOST_PRODUCTION string = "192.168.1.42:8500"
 
 //Zookeeper host
 const ZOOKEEPER_HOST_DEVELOPMENT string = "http://127.0.0.1:2375"
