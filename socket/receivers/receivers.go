@@ -34,10 +34,10 @@ func Cluster(rp *ReceiverPayload) {
 	}
 }
 
-func SwarmIP(rp *ReceiverPayload) {
+func SetSwarmIP(rp *ReceiverPayload) {
 	if config.CURRENT_ENV == config.DEVELOPMENT {
-		config.SWARM_MANAGER_DEVELOPMENT = rp.
+		config.SWARM_MANAGER_DEVELOPMENT = rp.Payload
 	} else {
-
+		config.SWARM_MANAGER_PRODUCTION = rp.Payload
 	}
 }
