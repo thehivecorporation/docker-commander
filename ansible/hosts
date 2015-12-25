@@ -2,8 +2,7 @@
 192.168.1.35      ansible_sudo_pass=123wersada    ansible_ssh_user=root
 
 [agents]
-192.168.1.35      ansible_sudo_pass=123wersada    ansible_ssh_user=root
-192.168.1.39      ansible_sudo_pass=osboxes.org    ansible_ssh_user=osboxes
+192.168.1.43	  ansible_sudo_pass=centos	ansible_ssh_user=root
 
 [server]
 192.168.1.35      ansible_sudo_pass=123wersada    ansible_ssh_user=root
