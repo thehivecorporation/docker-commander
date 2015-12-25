@@ -54,9 +54,11 @@ Requirements file for the MVP project can be found on [REQUIREMENTS.md](REQUIREM
 
 ## Gin Gonic Server
 
-### etcd piece
+### Discovery clients
 
-Maintains state of the app and connected Swarm agents in cluster
+Maintains state of the app and connected Swarm agents in cluster. Currently there is implementation for ETCD and Consul and their hosts must be written in config/config.go file
+
+> NOTE: Consul client API needs hosts without 'http://' prefix as it already uses it
 
 * Watch 2 events:
   * New Agent in cluster: Emits `new-agent` event in server
