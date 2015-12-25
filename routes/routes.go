@@ -2,15 +2,15 @@ package routes
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 
 	"github.com/sayden/docker-commander/Godeps/_workspace/src/github.com/gin-gonic/gin"
 	"github.com/sayden/docker-commander/Godeps/_workspace/src/github.com/gorilla/websocket"
+	"github.com/sayden/docker-commander/communications"
+	"github.com/sayden/docker-commander/config"
 	"github.com/sayden/docker-commander/discovery"
-	"github.com/sayden/docker-commander/entities"
 	"github.com/sayden/docker-commander/logger"
-	"github.com/sayden/docker-commander/socket"
+	"github.com/sayden/docker-commander/socket/receivers"
 	"github.com/sayden/docker-commander/swarm"
 )
 
@@ -26,8 +26,10 @@ func Init(ginApp *gin.Engine, s swarm.Swarm, i discovery.InfoService) {
 	ginApp.Static("/img", "./public/img")
 
 	ginApp.GET("/ws", func(c *gin.Context) {
-		initWebSocket(c, s, i)
+		commCh := make(chan *receivers.ReceiverPayload, 10)
+		initWebSocket(c, s, i, commCh)
 	})
+
 }
 
 func index(c *gin.Context) {
@@ -39,7 +41,7 @@ var wsupgrader = websocket.Upgrader{
 	WriteBufferSize: 1024,
 }
 
-func initWebSocket(c *gin.Context, s swarm.Swarm, i discovery.InfoService) {
+func initWebSocket(c *gin.Context, s swarm.Swarm, i discovery.InfoService, commCh chan *receivers.ReceiverPayload) {
 	conn, err := wsupgrader.Upgrade(c.Writer, c.Request, nil)
 	if err != nil {
 		log.Errorf("Failed to set websocket upgrade: %+v", err)
@@ -47,12 +49,13 @@ func initWebSocket(c *gin.Context, s swarm.Swarm, i discovery.InfoService) {
 	}
 	log.Info("Websocket started successfully")
 
-	go messageHandler(conn, s, i)
+	go messageHandler(conn, s, i, commCh)
+	go channelHandler(commCh)
 }
 
-func messageHandler(conn *websocket.Conn, s swarm.Swarm, i discovery.InfoService) {
+func messageHandler(conn *websocket.Conn, s swarm.Swarm, i discovery.InfoService, commCh chan *receivers.ReceiverPayload) {
 	for {
-		msgType, msg, err := conn.ReadMessage()
+		_, msg, err := conn.ReadMessage()
 		if err != nil {
 			log.Error(err)
 			break
@@ -63,74 +66,25 @@ func messageHandler(conn *websocket.Conn, s swarm.Swarm, i discovery.InfoService
 			log.Fatal(err)
 		}
 
+		msgr := &communications.WebsocketCommunicator{conn}
+
 		a := jsonMsg["action"].(string)
-
-		switch a {
-		case "cluster":
-			//Ask cluster state
-			info, err := socket.GetFullInfo(s, i)
-			if err != nil {
-				log.Error("Error trying to get cluster info", err)
-				sendMessage(err, conn, msgType)
-			} else {
-				sr := entities.SocketResponse{
-					Response: info,
-					Action:   a,
-				}
-				sendMessage(sr, conn, msgType)
-			}
-		case "agent:containers":
-			//Gets containers of some swarm agent
-			ipI := jsonMsg["ip"]
-			if ip, ok := ipI.(string); ok {
-				s = swarm.GetClientWithIP(ip)
-				info, err := socket.GetContainers(s, ip)
-				if err != nil {
-					log.Error("Error trying to get containers list", err)
-					sendMessage(err, conn, msgType)
-				} else {
-					sendMessage(info, conn, msgType)
-				}
-			} else {
-				err = errors.New("Error trying to parse json with containers")
-				log.Error(err)
-				sendMessage(err, conn, msgType)
-			}
-
-		case "agent:images":
-			//Gets images of some swarm agent
-			ipI := jsonMsg["ip"]
-			if ip, ok := ipI.(string); ok {
-				s = swarm.GetClientWithIP(ip)
-				info, err := socket.GetImages(s, ip)
-				if err != nil {
-					log.Error("Error trying to get images list", err)
-					sendMessage(err, conn, msgType)
-				} else {
-					sendMessage(info, conn, msgType)
-				}
-			} else {
-				err = errors.New("Error trying to parse json")
-				log.Error(err)
-				sendMessage(err, conn, msgType)
-			}
-		default:
-			fmt.Println("Unknown message", msg)
-		}
-
+		rp := receivers.ReceiverPayload{&s, &i, msgr, a, ""}
+		commCh <- &rp
 	}
 }
 
-func sendMessage(data interface{}, conn *websocket.Conn, msgType int) []byte {
-	var res []byte
-	json, err := json.Marshal(data)
-	if err != nil {
-		log.Error("Error trying to parse interface")
-		res = []byte(err.Error())
-	} else {
-		res = json
-	}
-	conn.WriteMessage(msgType, res)
+func channelHandler(r chan *receivers.ReceiverPayload) {
+	for {
+		rp := <-r
 
-	return res
+		switch rp.Action {
+		case config.CONNECTION_ACTION_CLUSTER:
+			//Ask entire cluster state
+			go receivers.Cluster(rp)
+		default:
+			fmt.Println("Unknown message, returning cluster state")
+			receivers.Cluster(rp)
+		}
+	}
 }

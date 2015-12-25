@@ -4,8 +4,8 @@ package config
 const APP_PORT string = ":8000"
 
 // SWARM_MANAGER host names
-const SWARM_MANAGER_DEVELOPMENT string = "http://192.168.1.35:8081"
-const SWARM_MANAGER_PRODUCTION string = "http://192.168.1.35:8081"
+var SWARM_MANAGER_DEVELOPMENT string = "http://192.168.1.35:8081"
+var SWARM_MANAGER_PRODUCTION string = "http://192.168.1.35:8081"
 
 // Discovery services
 
@@ -32,3 +32,11 @@ const DEVELOPMENT = 1
 const PRODUCTION = 2
 
 const CURRENT_ENV = MOCK
+
+// Front -> Back -> Front communication strategy
+const WEBSOCKET = 0
+const AJAX = 1
+const COMMUNICATIONS_STRATEGY = WEBSOCKET
+
+// Front -> Back actions
+const CONNECTION_ACTION_CLUSTER = "cluster"
